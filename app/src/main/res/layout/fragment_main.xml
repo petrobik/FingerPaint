@@ -1,11 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.bikshanov.fingerpaint.PaintView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/paintView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bikshanov.fingerpaint.MainActivityFragment"
-    tools:showIn="@layout/activity_main">
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:layout_margin="8dp">
 
-</com.bikshanov.fingerpaint.PaintView>
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <ImageButton
+            android:id="@+id/button_new"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_new"/>
+
+        <ImageButton
+            android:id="@+id/button_brush"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_paint_brush"/>
+
+        <ImageButton
+            android:id="@+id/button_eraser"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_eraser"/>
+
+        <ImageButton
+            android:id="@+id/button_undo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_undo"/>
+
+        <ImageButton
+            android:id="@+id/button_redo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_redo"/>
+
+        <ImageButton
+            android:id="@+id/button_save"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_save"/>
+
+    </LinearLayout>
+    </HorizontalScrollView>
+
+    <com.bikshanov.fingerpaint.PaintView
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/paintView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        tools:context="com.bikshanov.fingerpaint.MainActivityFragment"
+        tools:showIn="@layout/activity_main">
+
+    </com.bikshanov.fingerpaint.PaintView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <com.thebluealliance.spectrum.SpectrumPalette
+                android:id="@+id/palette"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:spectrum_autoPadding="true"
+                app:spectrum_colors="@array/demo_colors"
+                app:spectrum_columnCount="20">
+
+            </com.thebluealliance.spectrum.SpectrumPalette>
+
+        </HorizontalScrollView>
+
+    </LinearLayout>
+
+</LinearLayout>

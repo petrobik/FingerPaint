@@ -2,13 +2,17 @@ package com.bikshanov.fingerpaint;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -27,9 +31,12 @@ public class PaintView extends View {
     private Canvas bitmapCanvas;
     private final Paint paintScreen;
     private final Paint paintLine;
+    private final Paint paintEraser;
 
     private final Map<Integer, Path> pathMap = new HashMap<>();
     private final Map<Integer, Point> previousPointMap = new HashMap<>();
+
+    boolean erase = false;
 
 
     public PaintView(Context context, @Nullable AttributeSet attrs) {
@@ -41,8 +48,14 @@ public class PaintView extends View {
         paintLine.setAntiAlias(true);
         paintLine.setColor(Color.BLACK);
         paintLine.setStyle(Paint.Style.STROKE);
-        paintLine.setStrokeWidth(10);
+//        paintLine.setStrokeWidth(getResources().getInteger(R.integer.size_medium));
+        paintLine.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.brush_small));
+        paintLine.setStrokeJoin(Paint.Join.ROUND);
         paintLine.setStrokeCap(Paint.Cap.ROUND);
+
+        paintEraser = new Paint();
+        paintEraser.set(paintLine);
+        paintEraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
     }
 
     @Override
@@ -75,9 +88,29 @@ public class PaintView extends View {
         paintLine.setStrokeWidth(width);
     }
 
+    public void setBrushSize(float brushSize) {
+
+        float pixelAmount = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, brushSize,
+                getResources().getDisplayMetrics());
+        paintLine.setStrokeWidth(pixelAmount);
+
+    }
+
     public int getLineWidth() {
 
         return (int) paintLine.getStrokeWidth();
+    }
+
+    public void setErase(boolean isErase) {
+        erase = isErase;
+
+        if (erase) {
+            paintLine.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        }
+        else {
+            paintLine.setXfermode(null);
+        }
+
     }
 
     @Override
@@ -85,6 +118,7 @@ public class PaintView extends View {
 
         canvas.drawBitmap(bitmap, 0, 0, paintScreen);
 
+        if (erase) return;
 
         for (Integer key : pathMap.keySet()) {
             canvas.drawPath(pathMap.get(key), paintLine);
@@ -170,6 +204,7 @@ public class PaintView extends View {
                     // store the new coordinates
                     point.x = (int) newX;
                     point.y = (int) newY;
+
                 }
             }
         }

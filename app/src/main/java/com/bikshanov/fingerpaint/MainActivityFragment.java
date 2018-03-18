@@ -13,17 +13,23 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+
+import com.thebluealliance.spectrum.SpectrumPalette;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements SpectrumPalette.OnColorSelectedListener,
+        View.OnClickListener{
 
     private PaintView paintView;
     private float acceleration;
     private float currentAcceleration;
     private float lastAcceleration;
     private boolean dialogOnScreen = false;
+    ImageButton newButton, brushButton, eraserButton, undoButton, redoButton, saveButton;
 
     private static final int ACCELERATION_THRESHOLD = 100000;
 
@@ -103,11 +109,32 @@ public class MainActivityFragment extends Fragment {
 
         paintView = (PaintView) view.findViewById(R.id.paintView);
 
+        SpectrumPalette palette = (SpectrumPalette) view.findViewById(R.id.palette);
+        palette.setOnColorSelectedListener(this);
+
+        int selColor = getResources().getIntArray(R.array.demo_colors)[0];
+
+        palette.setSelectedColor(selColor);
+
+        newButton = (ImageButton) view.findViewById(R.id.button_new);
+        newButton.setOnClickListener(this);
+
+        brushButton = (ImageButton) view.findViewById(R.id.button_brush);
+        brushButton.setOnClickListener(this);
+
+        eraserButton = (ImageButton) view.findViewById(R.id.button_eraser);
+        eraserButton.setOnClickListener(this);
+
         acceleration = 0.00f;
         currentAcceleration = SensorManager.GRAVITY_EARTH;
         lastAcceleration = SensorManager.GRAVITY_EARTH;
 
         return view;
+    }
+
+    @Override
+    public void onColorSelected(int color) {
+        paintView.setDrawingColor(color);
     }
 
     @Override
@@ -150,5 +177,21 @@ public class MainActivityFragment extends Fragment {
 
     public void setDialogOnScreen(boolean visible) {
         dialogOnScreen = visible;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.button_new) {
+            getPaintView().clear();
+        }
+        else if (view.getId() == R.id.button_brush) {
+            paintView.setErase(false);
+            BrushDialogFragment brushDialog = new BrushDialogFragment();
+            brushDialog.show(getFragmentManager(), "brush dialog");
+        }
+        else if (view.getId() == R.id.button_eraser) {
+            paintView.setErase(true);
+        }
+
     }
 }

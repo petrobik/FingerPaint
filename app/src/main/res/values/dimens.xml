@@ -1,3 +1,5 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="brush_small">15dp</dimen>
+    <dimen name="brush_medium">25dp</dimen>
+    <dimen name="brush_large">35dp</dimen>
 </resources>
