@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Рисуем пальчиками</string>
+    <string name="app_name">Нарисуй-Ка!</string>
     <string name="menuitem_color">Выбор цвета</string>
     <string name="menuitem_brush">Выбор кисти</string>
     <string name="menuitem_eraser">Стереть все</string>

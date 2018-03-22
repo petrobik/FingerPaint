@@ -12,10 +12,12 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,12 +33,18 @@ public class PaintView extends View {
     private Canvas bitmapCanvas;
     private final Paint paintScreen;
     private final Paint paintLine;
-    private final Paint paintEraser;
 
     private final Map<Integer, Path> pathMap = new HashMap<>();
     private final Map<Integer, Point> previousPointMap = new HashMap<>();
 
+    private ArrayList<Path> paths = new ArrayList<Path>();
+    private ArrayList<Path> undoPaths = new ArrayList<Path>();
+    private Path currentPath = new Path();
+
     boolean erase = false;
+    boolean paint = true;
+
+    int rememberLineId = 0;
 
 
     public PaintView(Context context, @Nullable AttributeSet attrs) {
@@ -52,10 +60,6 @@ public class PaintView extends View {
         paintLine.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.brush_small));
         paintLine.setStrokeJoin(Paint.Join.ROUND);
         paintLine.setStrokeCap(Paint.Cap.ROUND);
-
-        paintEraser = new Paint();
-        paintEraser.set(paintLine);
-        paintEraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
     }
 
     @Override
@@ -63,15 +67,25 @@ public class PaintView extends View {
 
         bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
         bitmapCanvas = new Canvas(bitmap);
-        bitmap.eraseColor(Color.WHITE);
+//        bitmap.eraseColor(Color.WHITE);
+        bitmap.eraseColor(Color.TRANSPARENT);
     }
 
     public void clear() {
-        pathMap.clear();;
+        pathMap.clear();
         previousPointMap.clear();
-        bitmap.eraseColor(Color.WHITE);
+        paths.clear();
+        bitmap.eraseColor(Color.TRANSPARENT);
         invalidate();
     }
+
+//    public void clear() {
+//        paths.clear();
+//        undoPaths.clear();
+//        currentPath.reset();
+////        bitmap.eraseColor(Color.TRANSPARENT);
+//        invalidate();
+//    }
 
     public void setDrawingColor(int color) {
 
@@ -110,7 +124,10 @@ public class PaintView extends View {
         else {
             paintLine.setXfermode(null);
         }
+    }
 
+    public boolean isErase() {
+        return erase;
     }
 
     @Override
@@ -118,11 +135,18 @@ public class PaintView extends View {
 
         canvas.drawBitmap(bitmap, 0, 0, paintScreen);
 
-        if (erase) return;
+//        if (erase) return;
 
-        for (Integer key : pathMap.keySet()) {
-            canvas.drawPath(pathMap.get(key), paintLine);
+//        for (Integer key : pathMap.keySet()) {
+//            canvas.drawPath(pathMap.get(key), paintLine);
+//        }
+
+        for (Path p : paths) {
+            canvas.drawPath(p, paintLine);
         }
+
+//        canvas.drawPath(currentPath, paintLine);
+//        invalidate();
     }
 
     @Override
@@ -148,23 +172,70 @@ public class PaintView extends View {
         return true;
     }
 
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//
+//        final float x = event.getX();
+//        final float y = event.getY();
+//
+//        switch (event.getAction()) {
+//
+//            case MotionEvent.ACTION_DOWN:
+//                undoPaths.clear();
+//                currentPath.moveTo(x, y);
+//                break;
+//
+//            case MotionEvent.ACTION_MOVE:
+//                for (int i = 0; i < event.getHistorySize(); i++) {
+//                    currentPath.lineTo(event.getHistoricalX(i), event.getHistoricalY(i));
+//                }
+//
+//                currentPath.lineTo(x, y);
+//                break;
+//
+//            case MotionEvent.ACTION_UP:
+//            case MotionEvent.ACTION_CANCEL:
+//                currentPath.lineTo(x, y);
+//                paths.add(currentPath);
+//                currentPath.reset();
+//
+//                break;
+//        }
+//
+//        invalidate();
+//
+//        return true;
+//    }
+
+
     // called when the user touches the screen
     private void touchStarted(float x, float y, int lineID) {
         Path path; // used to store the path for the given touch id
         Point point; // used to store the last point in path
 
         // if there is already a path for lineID
-        if (pathMap.containsKey(lineID)) {
-            path = pathMap.get(lineID); // get the Path
-            path.reset(); // resets the Path because a new touch has started
-            point = previousPointMap.get(lineID); // get Path's last point
-        }
-        else {
+//        if (pathMap.containsKey(lineID)) {
+//            path = pathMap.get(lineID); // get the Path
+//            paths.add(path);
+//            path.reset(); // resets the Path because a new touch has started
+//            point = previousPointMap.get(lineID); // get Path's last point
+//        }
+//        else {
+//            path = new Path();
+//            pathMap.put(lineID, path); // add the Path to Map
+//            point = new Point(); // create a new Point
+//            previousPointMap.put(lineID, point); // add the Point to the Map
+//            paths.add(path); // /
+//            Log.d("Path", String.valueOf(paths.size()));
+////            currentPath = path;
+//        }
             path = new Path();
             pathMap.put(lineID, path); // add the Path to Map
             point = new Point(); // create a new Point
             previousPointMap.put(lineID, point); // add the Point to the Map
-        }
+            paths.add(path); // /
+            Log.d("Path", String.valueOf(paths.size()));
+////            currentPath = path;
 
         // move to the coordinates of the touch
         path.moveTo(x, y);
@@ -205,6 +276,12 @@ public class PaintView extends View {
                     point.x = (int) newX;
                     point.y = (int) newY;
 
+
+//                    if (erase) {
+//                        bitmapCanvas.drawPath(path, paintLine);
+//                    }
+
+//                    bitmapCanvas.drawPath(path, paintLine);
                 }
             }
         }
@@ -213,7 +290,16 @@ public class PaintView extends View {
     // called when the user finishes a touch
     private void touchEnded(int lineID) {
         Path path = pathMap.get(lineID); // get the corresponding Path
-        bitmapCanvas.drawPath(path, paintLine); // draw to bitmapCanvas
-        path.reset(); // reset the Path
+//        currentPath = path;
+//        paths.add(path); // /
+//        bitmapCanvas.drawPath(path, paintLine); // draw to bitmapCanvas
+//        path.reset(); // reset the Path
+    }
+
+    public void undo() {
+        if (paths.size() > 0) {
+            paths.remove(paths.size() - 1);
+            invalidate();
+        }
     }
 }

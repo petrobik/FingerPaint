@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="8dp"
-    android:layout_margin="8dp">
+    android:layout_margin="4dp">
 
     <HorizontalScrollView
         android:layout_width="wrap_content"
@@ -24,37 +24,49 @@
             android:id="@+id/button_new"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_new"/>
+            android:src="@drawable/ic_new"
+            android:background="@drawable/button_selector"
+            android:layout_margin="2dp"/>
 
         <ImageButton
             android:id="@+id/button_brush"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_paint_brush"/>
+            android:src="@drawable/ic_paint_brush"
+            android:background="@drawable/button_selector"
+            android:layout_margin="2dp"/>
 
         <ImageButton
             android:id="@+id/button_eraser"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_eraser"/>
+            android:src="@drawable/ic_eraser"
+            android:background="@drawable/button_selector"
+            android:layout_margin="2dp"/>
 
         <ImageButton
             android:id="@+id/button_undo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_undo"/>
+            android:src="@drawable/ic_undo"
+            android:background="@drawable/button_selector"
+            android:layout_margin="2dp"/>
 
         <ImageButton
             android:id="@+id/button_redo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_redo"/>
+            android:src="@drawable/ic_redo"
+            android:background="@drawable/button_selector"
+            android:layout_margin="2dp"/>
 
         <ImageButton
             android:id="@+id/button_save"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_save"/>
+            android:src="@drawable/ic_save"
+            android:background="@drawable/button_selector"
+            android:layout_margin="2dp"/>
 
     </LinearLayout>
     </HorizontalScrollView>
@@ -63,7 +75,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/paintView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         tools:context="com.bikshanov.fingerpaint.MainActivityFragment"
         tools:showIn="@layout/activity_main">

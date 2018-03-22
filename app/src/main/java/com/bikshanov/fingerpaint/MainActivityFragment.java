@@ -1,10 +1,13 @@
 package com.bikshanov.fingerpaint;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -125,6 +128,9 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         eraserButton = (ImageButton) view.findViewById(R.id.button_eraser);
         eraserButton.setOnClickListener(this);
 
+        undoButton = (ImageButton) view.findViewById(R.id.button_undo);
+        undoButton.setOnClickListener(this);
+
         acceleration = 0.00f;
         currentAcceleration = SensorManager.GRAVITY_EARTH;
         lastAcceleration = SensorManager.GRAVITY_EARTH;
@@ -135,6 +141,7 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
     @Override
     public void onColorSelected(int color) {
         paintView.setDrawingColor(color);
+        paintView.setErase(false);
     }
 
     @Override
@@ -185,12 +192,20 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
             getPaintView().clear();
         }
         else if (view.getId() == R.id.button_brush) {
-            paintView.setErase(false);
-            BrushDialogFragment brushDialog = new BrushDialogFragment();
-            brushDialog.show(getFragmentManager(), "brush dialog");
+            if (!paintView.isErase()) {
+                BrushDialogFragment brushDialog = new BrushDialogFragment();
+                brushDialog.show(getFragmentManager(), "brush dialog");
+            }
+            else {
+                paintView.setErase(false);
+            }
         }
         else if (view.getId() == R.id.button_eraser) {
             paintView.setErase(true);
+//            eraserButton.setBackgroundResource(R.drawable.red_border);
+        }
+        else if (view.getId() == R.id.button_undo) {
+            paintView.undo();
         }
 
     }
