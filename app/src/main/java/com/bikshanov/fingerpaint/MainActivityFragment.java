@@ -7,6 +7,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.Image;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -108,7 +109,7 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
 
         paintView = (PaintView) view.findViewById(R.id.paintView);
 
@@ -131,6 +132,12 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         undoButton = (ImageButton) view.findViewById(R.id.button_undo);
         undoButton.setOnClickListener(this);
 
+        redoButton = (ImageButton) view.findViewById(R.id.button_redo);
+        redoButton.setOnClickListener(this);
+
+        saveButton = (ImageButton) view.findViewById(R.id.button_save);
+        saveButton.setOnClickListener(this);
+
         acceleration = 0.00f;
         currentAcceleration = SensorManager.GRAVITY_EARTH;
         lastAcceleration = SensorManager.GRAVITY_EARTH;
@@ -144,7 +151,7 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         paintView.setErase(false);
     }
 
-    @Override
+    /*@Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.paint_fragment_menu, menu);
@@ -177,6 +184,7 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
         return super.onOptionsItemSelected(item);
     }
+    */
 
     public PaintView getPaintView() {
         return paintView;
@@ -206,6 +214,14 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         }
         else if (view.getId() == R.id.button_undo) {
             paintView.undo();
+        }
+
+        else if (view.getId() == R.id.button_redo) {
+            paintView.redo();
+        }
+
+        else if (view.getId() == R.id.button_save) {
+            paintView.setPattern("retro");
         }
 
     }

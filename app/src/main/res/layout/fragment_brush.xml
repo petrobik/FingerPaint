@@ -9,20 +9,30 @@
     <ImageButton
         android:id="@+id/smallBrushImageButton"
         android:layout_height="50dp"
-        android:layout_gravity="fill_horizontal"
-        android:src="@drawable/small"/>
+        android:layout_width="50dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/small"
+        android:background="@drawable/green_border"
+        android:layout_marginTop="8dp"/>
 
     <ImageButton
         android:id="@+id/mediumBrushImageButton"
         android:layout_height="50dp"
-        android:layout_gravity="fill_horizontal"
-        android:src="@drawable/medium"/>
+        android:layout_width="50dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/medium"
+        android:background="@drawable/green_border"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
 
     <ImageButton
         android:id="@+id/largeBrushImageButton"
         android:layout_height="50dp"
-        android:layout_gravity="fill_horizontal"
-        android:src="@drawable/large"/>
+        android:layout_width="50dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/large"
+        android:background="@drawable/green_border"
+        android:layout_marginBottom="8dp"/>
 
 </GridLayout>
 

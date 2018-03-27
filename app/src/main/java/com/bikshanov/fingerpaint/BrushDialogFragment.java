@@ -45,6 +45,7 @@ public class BrushDialogFragment extends DialogFragment implements View.OnClickL
         mediumBrushImageButton.getDrawable().setColorFilter(paintView.getDrawingColor(), PorterDuff.Mode.SRC_IN);
         largeBrushImageButton.getDrawable().setColorFilter(paintView.getDrawingColor(), PorterDuff.Mode.SRC_IN);
 
+
 //        final SeekBar brushWidthSeekBar = (SeekBar) brushDialogView.findViewById(R.id.brushWidthSeekBar);
 //        brushWidthSeekBar.setOnSeekBarChangeListener(brushWidthChanged);
 //        brushWidthSeekBar.setProgress(paintView.getLineWidth());
@@ -95,50 +96,18 @@ public class BrushDialogFragment extends DialogFragment implements View.OnClickL
 
             brushSize = getResources().getDimensionPixelSize(R.dimen.brush_small);
             getPaintFragment().getPaintView().setLineWidth(brushSize);
-//            getPaintFragment().getPaintView().setBrushSize(brushSize);
             dismiss();
         }
         else if (view.getId() == R.id.mediumBrushImageButton) {
 
             brushSize = getResources().getDimensionPixelSize(R.dimen.brush_medium);
             getPaintFragment().getPaintView().setLineWidth(brushSize);
-//            getPaintFragment().getPaintView().setBrushSize(brushSize);
             dismiss();
         }
         else {
             brushSize = getResources().getDimensionPixelSize(R.dimen.brush_large);
             getPaintFragment().getPaintView().setLineWidth(brushSize);
-//            getPaintFragment().getPaintView().setBrushSize(brushSize);
             dismiss();
         }
     }
-
-////    private final SeekBar.OnSeekBarChangeListener brushWidthChanged = new SeekBar.OnSeekBarChangeListener() {
-////
-////        final Bitmap bitmap = Bitmap.createBitmap(400, 100, Bitmap.Config.ARGB_8888);
-////        final Canvas canvas = new Canvas(bitmap);
-////
-////        @Override
-////        public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-////            Paint p = new Paint();
-////            p.setColor(getPaintFragment().getPaintView().getDrawingColor());
-////            p.setStrokeCap(Paint.Cap.ROUND);
-////            p.setStrokeWidth(progress);
-////
-////            bitmap.eraseColor(ContextCompat.getColor(getContext(), android.R.color.transparent));
-////            canvas.drawLine(30, 50, 370, 50, p);
-////            brushImageView.setImageBitmap(bitmap);
-////        }
-//
-//        @Override
-//        public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//        }
-//
-//        @Override
-//        public void onStopTrackingTouch(SeekBar seekBar) {
-//
-//        }
-//    };
-
 }
