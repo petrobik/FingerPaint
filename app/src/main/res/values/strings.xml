@@ -6,5 +6,9 @@
     <string name="menuitem_eraser">Erase</string>
     <string name="select_color">Select color</string>
     <string name="select_brush">Select brush</string>
+    <string name="select_eraser">Select eraser</string>
+    <string name="select_pattern">Select pattern</string>
     <string name="set_brush_width">Select</string>
+    <string name="save_drawing">Save drawing</string>
+    <string name="save_drawing_message">Save drawing to the Gallery?</string>
 </resources>

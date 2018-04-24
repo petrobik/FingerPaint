@@ -32,10 +32,6 @@ public class PaintView extends View {
 
     private static final float TOUCH_TOLERANCE = 10;
 
-
-
-
-
     private Bitmap bitmap;
     private Bitmap canvasBitmap;
     private Canvas bitmapCanvas;
@@ -44,25 +40,37 @@ public class PaintView extends View {
     private Paint backgroundPaint;
     private Canvas drawCanvas;
 
-    private final Map<Integer, Path> pathMap = new HashMap<>();
-    private final Map<Integer, Point> previousPointMap = new HashMap<>();
+//    private final Map<Integer, Path> pathMap = new HashMap<>();
+//    private final Map<Integer, Point> previousPointMap = new HashMap<>();
 
     private ArrayList<Path> paths = new ArrayList<>();
-    private ArrayList<Paint> paints = new ArrayList<>();
+//    private ArrayList<Paint> paints = new ArrayList<>();
     private ArrayList<Path> undonePaths = new ArrayList<>();
-    private ArrayList<Paint> undonePaints = new ArrayList<>();
+//    private ArrayList<Paint> undonePaints = new ArrayList<>();
+//    private HashMap<Path, Integer> colorsMap = new HashMap<Path, Integer>();
+//    private HashMap<Path, Integer> widthMap = new HashMap<Path, Integer>();
+//    private HashMap<Path, BitmapShader> patternMap = new HashMap<Path, BitmapShader>();
+
+    private Stroke currentStroke = new Stroke();
+    private HashMap<Path, Stroke> strokeMap = new HashMap<>();
+
     private Path drawPath;
 
+    private Bitmap patternBitmap;
+    private BitmapShader patternShader;
+
     private int strokeWidth = 15;
+    private int eraserWidth;
     private int paintColor = 0xFF000000;
     private int backgroundColor = 0xFFFFFFFF;
     private int eraseColor = 0xFFFFFFFF;
 
     boolean erase = false;
+    boolean isPattern = false;
 
     float pointX, pointY;
 
-    boolean isFilling = false;
+    private final int MAX_UNDO = 10;
 
 
     public PaintView(Context context, @Nullable AttributeSet attrs) {
@@ -75,10 +83,13 @@ public class PaintView extends View {
     private void init() {
 
 //        paintScreen = new Paint();
+        eraserWidth = getResources().getDimensionPixelSize((R.dimen.brush_small));
         strokeWidth = getResources().getDimensionPixelSize(R.dimen.brush_small);
         drawPath = new Path();
+        drawPaint = new Paint();
         backgroundPaint = new Paint();
         eraseColor = backgroundColor;
+        patternShader = null;
 
         initPaint();
 
@@ -86,20 +97,19 @@ public class PaintView extends View {
 
     private void initPaint() {
 
-            drawPaint = new Paint();
+//            drawPaint = new Paint();
             drawPaint.setAntiAlias(true);
 
             if (!erase) {
                 drawPaint.setColor(paintColor);
+                drawPaint.setStrokeWidth(strokeWidth);
             }
             else {
                 drawPaint.setColor(eraseColor);
+                drawPaint.setStrokeWidth(eraserWidth);
             }
 
-            drawPaint.setStrokeWidth(strokeWidth);
             drawPaint.setStyle(Paint.Style.STROKE);
-//        drawPaint.setStrokeWidth(getResources().getInteger(R.integer.size_medium));
-//        drawPaint.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.brush_small));
             drawPaint.setStrokeJoin(Paint.Join.ROUND);
             drawPaint.setStrokeCap(Paint.Cap.ROUND);
     }
@@ -116,11 +126,32 @@ public class PaintView extends View {
 
     private void drawPaths(Canvas canvas) {
 
-        int i = 0;
+//        int i = 0;
+//        for (Path p: paths) {
+//            canvas.drawPath(p, paints.get(i));
+//            i++;
+//        }
+
+//        for (Path p: paths) {
+//            drawPaint.setColor(colorsMap.get(p));
+//            drawPaint.setStrokeWidth(widthMap.get(p));
+//            drawPaint.setShader(patternMap.get(p));
+//            canvas.drawPath(p, drawPaint);
+//        }
+
         for (Path p: paths) {
-            canvas.drawPath(p, paints.get(i));
-            i++;
+//            currentStroke = strokeMap.get(p);
+            drawPaint.setColor(strokeMap.get(p).getColor());
+            drawPaint.setStrokeWidth(strokeMap.get(p).getBrushSize());
+            drawPaint.setShader(strokeMap.get(p).getPattern());
+            canvas.drawPath(p, drawPaint);
         }
+
+
+
+//        for (Path p: paths) {
+//            canvas.drawPath(p, drawPaint);
+//        }
 
     }
 
@@ -128,10 +159,24 @@ public class PaintView extends View {
     protected void onDraw(Canvas canvas) {
 
         drawBackground(canvas);
+
+        canvas.drawBitmap(canvasBitmap, 0, 0, backgroundPaint);
         drawPaths(canvas);
 
-        canvas.drawPath(drawPath, drawPaint);
+//        canvas.drawPath(drawPath, drawPaint);
 
+        if (!erase) {
+            drawPaint.setColor(paintColor);
+            drawPaint.setStrokeWidth(strokeWidth);
+        }
+        else {
+            drawPaint.setColor(eraseColor);
+            drawPaint.setStrokeWidth(eraserWidth);
+        }
+
+        drawPaint.setShader(patternShader);
+
+        canvas.drawPath(drawPath, drawPaint);
     }
 
     @Override
@@ -140,7 +185,7 @@ public class PaintView extends View {
         canvasBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
         drawCanvas = new Canvas(canvasBitmap);
 
-//        canvasBitmap.eraseColor(Color.WHITE);
+        canvasBitmap.eraseColor(Color.WHITE); //
 
     }
 
@@ -172,6 +217,8 @@ public class PaintView extends View {
 
     private void touchStarted(float x, float y) {
 
+
+        currentStroke = new Stroke();
         // move to the coordinates of the touch
         drawPath.reset();
         drawPath.moveTo(x, y);
@@ -223,8 +270,59 @@ public class PaintView extends View {
 
         drawPath.lineTo(x, y);
 
-        paths.add(drawPath);
-        paints.add(drawPaint);
+        if (paths.size() < MAX_UNDO) {
+
+            paths.add(drawPath);
+//            paints.add(drawPaint);
+
+//            drawCanvas.drawBitmap(canvasBitmap, 0, 0, backgroundPaint);
+        }
+
+        else {
+
+//            drawPaint.setColor(colorsMap.get(paths.get(0)));
+//            drawPaint.setStrokeWidth(widthMap.get(paths.get(0)));
+//            drawPaint.setShader(patternMap.get(paths.get(0)));
+
+            drawPaint.setColor(strokeMap.get(paths.get(0)).getColor());
+            drawPaint.setStrokeWidth(strokeMap.get(paths.get(0)).getBrushSize());
+            drawPaint.setShader(strokeMap.get(paths.get(0)).getPattern());
+
+            drawCanvas.drawPath(paths.get(0), drawPaint);
+
+            ArrayList<Path> tmpPaths = new ArrayList<Path>(paths.subList(1, MAX_UNDO));
+            paths = tmpPaths;
+            paths.add(drawPath);
+//            ArrayList<Paint> tmpPaints = new ArrayList<>(paints.subList(1, MAX_UNDO));
+//            paints = tmpPaints;
+//            paints.add(drawPaint);
+
+//            drawCanvas.drawBitmap(canvasBitmap, 0, 0, backgroundPaint);
+        }
+
+//        paths.add(drawPath); //
+
+
+        currentStroke.setPattern(patternShader);
+
+        if (!erase) {
+            currentStroke.setColor(paintColor);
+            currentStroke.setBrushSize(strokeWidth);
+            strokeMap.put(drawPath, currentStroke);
+//            colorsMap.put(drawPath, paintColor);
+        }
+        else {
+            currentStroke.setColor(eraseColor);
+            currentStroke.setBrushSize(eraserWidth);
+            strokeMap.put(drawPath, currentStroke);
+//            colorsMap.put(drawPath, eraseColor);
+        }
+
+//        widthMap.put(drawPath, strokeWidth);
+//        patternMap.put(drawPath, patternShader);
+
+
+//        drawCanvas.drawPath(drawPath, drawPaint);
         drawPath = new Path();
         drawPath.reset();
         initPaint();
@@ -234,12 +332,16 @@ public class PaintView extends View {
     public void clear() {
 
         paths.clear();
-        paints.clear();
+//        paints.clear();
         undonePaths.clear();
-        undonePaints.clear();
+//        undonePaints.clear();
+//        colorsMap.clear();
+//        widthMap.clear();
+        strokeMap.clear();
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
-//        canvasBitmap.eraseColor(Color.WHITE);
+        canvasBitmap.eraseColor(Color.WHITE);
         setErase(false);
+//        setEmptyPattern();
         invalidate();
     }
 
@@ -265,8 +367,14 @@ public class PaintView extends View {
 
     public void setLineWidth(int width) {
 
-        strokeWidth = width;
-        drawPaint.setStrokeWidth(strokeWidth);
+        if (!erase) {
+            strokeWidth = width;
+            drawPaint.setStrokeWidth(strokeWidth);
+        }
+        else {
+            eraserWidth = width;
+            drawPaint.setStrokeWidth(eraserWidth);
+        }
     }
 
     public void setBackgroundColor(int color) {
@@ -294,10 +402,21 @@ public class PaintView extends View {
 
         erase = isErase;
 
-        if (erase)
+        if (erase) {
             drawPaint.setColor(eraseColor);
-        else
+            drawPaint.setStrokeWidth(eraserWidth);
+
+        }
+        else {
             drawPaint.setColor(paintColor);
+            drawPaint.setStrokeWidth(strokeWidth);
+        }
+
+    }
+
+    public void setPatternMode(boolean pattern) {
+
+        isPattern = pattern;
 
     }
 
@@ -305,136 +424,16 @@ public class PaintView extends View {
         return erase;
     }
 
+    public boolean isPattern() {
 
-
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        int action = event.getActionMasked(); // event type
-//        int actionIndex = event.getActionIndex(); // pointer (i.e., finger)
-//
-//        // determine whether touch started, ended or is moving
-//        if (action == MotionEvent.ACTION_DOWN ||
-//                action == MotionEvent.ACTION_POINTER_DOWN) {
-//            touchStarted(event.getX(actionIndex), event.getY(actionIndex),
-//                    event.getPointerId(actionIndex));
-//        }
-//        else if (action == MotionEvent.ACTION_UP ||
-//                action == MotionEvent.ACTION_POINTER_UP) {
-//            touchEnded(event.getPointerId(actionIndex));
-//        }
-//        else {
-//            touchMoved(event);
-//        }
-//
-//        invalidate(); // redraw
-//        return true;
-//    }
-
-
-
-
-//    // called when the user touches the screen
-//    private void touchStarted(float x, float y, int lineID) {
-//        Path path; // used to store the path for the given touch id
-//        Point point; // used to store the last point in path
-//
-//        // if there is already a path for lineID
-//        if (pathMap.containsKey(lineID)) {
-//            path = pathMap.get(lineID); // get the Path
-//            paths.add(path);
-//            path.reset(); // resets the Path because a new touch has started
-//            point = previousPointMap.get(lineID); // get Path's last point
-//        }
-//        else {
-//            path = new Path();
-//            pathMap.put(lineID, path); // add the Path to Map
-//            point = new Point(); // create a new Point
-//            previousPointMap.put(lineID, point); // add the Point to the Map
-//            paths.add(path); // /
-//            Log.d("Path", String.valueOf(paths.size()));
-////            drawPath = path;
-//        }
-//            path = new Path();
-//            pathMap.put(lineID, path); // add the Path to Map
-//            point = new Point(); // create a new Point
-//            previousPointMap.put(lineID, point); // add the Point to the Map
-//            paths.add(path); // /
-//            Log.d("Path", String.valueOf(paths.size()));
-//////            drawPath = path;
-//
-//        // move to the coordinates of the touch
-//        path.moveTo(x, y);
-//        point.x = (int) x;
-//        point.y = (int) y;
-//    }
-
-    // called when the user touches the screen
-
-
-//    // called when the user drags along the screen
-//    private void touchMoved(MotionEvent event) {
-//        // for each of the pointers in the given MotionEvent
-//        for (int i = 0; i < event.getPointerCount(); i++) {
-//            // get the pointer ID and pointer index
-//            int pointerID = event.getPointerId(i);
-//            int pointerIndex = event.findPointerIndex(pointerID);
-//
-//            // if there is a path associated with the pointer
-//            if (pathMap.containsKey(pointerID)) {
-//                // get the new coordinates for the pointer
-//                float newX = event.getX(pointerIndex);
-//                float newY = event.getY(pointerIndex);
-//
-//                // get the path and previous point associated with
-//                // this pointer
-//                Path path = pathMap.get(pointerID);
-//                Point point = previousPointMap.get(pointerID);
-//
-//                // calculate how far the user moved from the last update
-//                float deltaX = Math.abs(newX - point.x);
-//                float deltaY = Math.abs(newY - point.y);
-//
-//                // if the distance is significant enough to matter
-//                if (deltaX >= TOUCH_TOLERANCE || deltaY >= TOUCH_TOLERANCE) {
-//                    // move the path to the new location
-//                    path.quadTo(point.x, point.y, (newX + point.x) / 2,
-//                            (newY + point.y) / 2);
-//
-//                    // store the new coordinates
-//                    point.x = (int) newX;
-//                    point.y = (int) newY;
-//
-//
-////                    if (erase) {
-////                        bitmapCanvas.drawPath(path, drawPaint);
-////                    }
-//
-////                    bitmapCanvas.drawPath(path, drawPaint);
-//                }
-//            }
-//        }
-//    }
-
-
-
-
-//    // called when the user finishes a touch
-//    private void touchEnded(int lineID) {
-//        Path path = pathMap.get(lineID); // get the corresponding Path
-////        drawPath = path;
-////        paths.add(path); // /
-////        bitmapCanvas.drawPath(path, drawPaint); // draw to bitmapCanvas
-////        path.reset(); // reset the Path
-//    }
-
-
-
+        return isPattern;
+    }
 
     public void undo() {
 
         if (paths.size() > 0) {
             undonePaths.add(paths.remove(paths.size() - 1));
-            undonePaints.add(paints.remove(paints.size() - 1));
+//            undonePaints.add(paints.remove(paints.size() - 1));
             invalidate();
         }
     }
@@ -443,7 +442,7 @@ public class PaintView extends View {
 
         if (undonePaths.size() > 0) {
             paths.add(undonePaths.remove(undonePaths.size() - 1));
-            paints.add(undonePaints.remove(undonePaints.size() - 1));
+//            paints.add(undonePaints.remove(undonePaints.size() - 1));
             invalidate();
         }
     }
@@ -453,10 +452,19 @@ public class PaintView extends View {
         invalidate();
         int patternId = getResources().getIdentifier(newPattern, "drawable", "com.bikshanov.fingerpaint");
 
-        Bitmap patternBitmap = BitmapFactory.decodeResource(getResources(), patternId);
-        BitmapShader patternShader = new BitmapShader(patternBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        patternBitmap = BitmapFactory.decodeResource(getResources(), patternId);
+        patternShader = new BitmapShader(patternBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
 
         drawPaint.setColor(0xFFFFFFFF);
         drawPaint.setShader(patternShader);
+
+        isPattern = true;
     }
+
+    public void setEmptyPattern() {
+
+        patternShader = null;
+        isPattern = false;
+    }
+
 }

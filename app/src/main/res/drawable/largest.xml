@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:dither="true"
     android:shape="line">
-    <stroke android:width="@dimen/brush_large"
+    <stroke android:width="@dimen/brush_largest"
         android:color="@color/md_white"/>
 </shape>

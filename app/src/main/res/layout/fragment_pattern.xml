@@ -1,0 +1,120 @@
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:gravity="center">
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <GridLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:columnCount="2"
+            android:rowCount="5"
+            android:useDefaultMargins="true">
+
+            <ImageButton
+                android:id="@+id/floralButton"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:src="@drawable/floral"
+                android:background="@color/md_white"
+                android:layout_marginBottom="5dp"
+                android:layout_column="0"
+                android:layout_row="0"/>
+
+            <ImageButton
+                android:id="@+id/flowersButton"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:src="@drawable/flowers"
+                android:background="@color/md_white"
+                android:layout_marginBottom="5dp"
+                android:layout_column="1"
+                android:layout_row="0"/>
+
+            <ImageButton
+                android:id="@+id/starsButton"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:src="@drawable/stars"
+                android:background="@color/md_white"
+                android:layout_marginBottom="5dp"
+                android:layout_column="0"
+                android:layout_row="1"/>
+
+            <ImageButton
+                android:id="@+id/cloudsButton"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:src="@drawable/clouds_200"
+                android:background="@color/md_white"
+                android:layout_marginBottom="5dp"
+                android:layout_column="1"
+                android:layout_row="1"/>
+
+            <ImageButton
+                android:id="@+id/grassButton"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:src="@drawable/grass"
+                android:background="@color/md_white"
+                android:layout_marginBottom="5dp"
+                android:layout_column="0"
+                android:layout_row="2"/>
+
+            <ImageButton
+                android:id="@+id/leavesButton"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:src="@drawable/strawberry"
+                android:background="@color/md_white"
+                android:layout_marginBottom="5dp"
+                android:layout_column="1"
+                android:layout_row="2"/>
+
+            <ImageButton
+                android:id="@+id/brickButton"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:src="@drawable/brick"
+                android:background="@color/md_white"
+                android:layout_marginBottom="5dp"
+                android:layout_column="0"
+                android:layout_row="3"/>
+
+            <ImageButton
+                android:id="@+id/woodButton"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:src="@drawable/wood"
+                android:background="@color/md_white"
+                android:layout_marginBottom="5dp"
+                android:layout_column="1"
+                android:layout_row="3"/>
+
+            <ImageButton
+                android:id="@+id/partyButton"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:src="@drawable/party"
+                android:background="@color/md_white"
+                android:layout_marginBottom="5dp"
+                android:layout_column="0"
+                android:layout_row="4"/>
+
+            <ImageButton
+                android:id="@+id/butterflyButton"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:src="@drawable/butterfly"
+                android:background="@color/md_white"
+                android:layout_marginBottom="5dp"
+                android:layout_column="1"
+                android:layout_row="4"/>
+
+        </GridLayout>
+    </ScrollView>
+</LinearLayout>

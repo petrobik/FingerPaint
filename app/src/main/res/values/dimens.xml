@@ -1,5 +1,7 @@
 <resources>
-    <dimen name="brush_small">15dp</dimen>
-    <dimen name="brush_medium">25dp</dimen>
-    <dimen name="brush_large">35dp</dimen>
+    <dimen name="brush_smallest">5dp</dimen>
+    <dimen name="brush_small">10dp</dimen>
+    <dimen name="brush_medium">15dp</dimen>
+    <dimen name="brush_large">20dp</dimen>
+    <dimen name="brush_largest">35dp</dimen>
 </resources>

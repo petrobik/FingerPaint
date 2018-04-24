@@ -7,71 +7,90 @@
     android:orientation="vertical"
     android:background="@color/md_blue_100">
 
-    <HorizontalScrollView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@color/md_white"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp">
+
+        <HorizontalScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scrollbars="none"
-        android:layout_gravity="center"
-        android:background="@color/md_white">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:layout_gravity="right"
+        android:fillViewport="true"
         android:background="@color/md_white"
-        android:layout_margin="3dp">
+        android:layout_gravity="center_horizontal">
 
-        <ImageButton
-            android:id="@+id/button_new"
+            <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_new"
-            android:background="@drawable/button_selector"
-            android:padding="2dp"/>
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:background="@color/md_white"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp">
 
-        <ImageButton
-            android:id="@+id/button_brush"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_paint_brush_2"
-            android:background="@drawable/button_selector"
-            android:padding="2dp"/>
+                <ImageButton
+                    android:id="@+id/button_brush"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:src="@drawable/ic_paint_brush_2"
+                    android:background="@drawable/button_selector"
+                    android:padding="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginLeft="2dp"/>
 
-        <ImageButton
-            android:id="@+id/button_eraser"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_eraser_3"
-            android:background="@drawable/button_selector"
-            android:padding="2dp"/>
+                <ImageButton
+                    android:id="@+id/button_eraser"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:src="@drawable/ic_eraser_3"
+                    android:background="@drawable/button_selector"
+                    android:padding="2dp"
+                    android:layout_marginRight="2dp"/>
 
-        <ImageButton
-            android:id="@+id/button_undo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_undo"
-            android:background="@drawable/button_selector"
-            android:padding="2dp"/>
+                <ImageButton
+                    android:id="@+id/button_pattern"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:src="@drawable/ic_flower"
+                    android:background="@drawable/button_selector"
+                    android:padding="2dp"
+                    android:layout_marginRight="2dp"/>
 
-        <ImageButton
-            android:id="@+id/button_redo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_redo"
-            android:background="@drawable/button_selector"
-            android:padding="2dp"/>
+                <ImageButton
+                    android:id="@+id/button_undo"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:src="@drawable/ic_undo"
+                    android:background="@drawable/button_selector"
+                    android:padding="2dp"
+                    android:layout_marginRight="2dp"/>
 
-        <ImageButton
-            android:id="@+id/button_save"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_save"
-            android:background="@drawable/button_selector"
-            android:padding="2dp"/>
+                <ImageButton
+                    android:id="@+id/button_new"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:src="@drawable/ic_trash"
+                    android:background="@drawable/button_selector"
+                    android:padding="2dp"
+                    android:layout_marginRight="2dp"/>
 
+                <ImageButton
+                    android:id="@+id/button_save"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:src="@drawable/ic_save"
+                    android:background="@drawable/button_selector"
+                    android:padding="2dp"
+                    android:layout_marginRight="2dp"/>
+
+            </LinearLayout>
+        </HorizontalScrollView>
     </LinearLayout>
-    </HorizontalScrollView>
 
     <com.bikshanov.fingerpaint.PaintView
         xmlns:tools="http://schemas.android.com/tools"
@@ -81,7 +100,7 @@
         android:layout_weight="1"
         tools:context="com.bikshanov.fingerpaint.MainActivityFragment"
         tools:showIn="@layout/activity_main"
-        android:layout_margin="5dp">
+        android:layout_margin="4dp">
 
     </com.bikshanov.fingerpaint.PaintView>
 
@@ -90,7 +109,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@color/md_white"
-        android:layout_margin="5dp">
+        android:layout_marginBottom="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp">
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
@@ -112,3 +133,4 @@
     </LinearLayout>
 
 </LinearLayout>
+
