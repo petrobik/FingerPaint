@@ -1,8 +1,11 @@
 package com.bikshanov.fingerpaint;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -24,7 +27,7 @@ import java.util.UUID;
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment implements SpectrumPalette.OnColorSelectedListener,
-        View.OnClickListener{
+        View.OnClickListener, ClearDialogFragment.ClearDialogFragmentListener {
 
     private PaintView paintView;
     private float acceleration;
@@ -35,8 +38,6 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 //    ImageButton smallestButton, smallButton, smallLargeButton, mediumButton, largeButton;
 
 //    private ViewGroup brushPanel;
-
-    private boolean showingBrushPanel = false;
 
     private static final int ACCELERATION_THRESHOLD = 100000;
 
@@ -76,7 +77,8 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
                 acceleration = currentAcceleration * (currentAcceleration - lastAcceleration);
 
                 if (acceleration > ACCELERATION_THRESHOLD) {
-                    getPaintView().clear();
+//                    getPaintView().clear();
+                    confirmClear();
                 }
             }
 
@@ -147,72 +149,24 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
         brushButton.setBackgroundResource(R.drawable.select_button_background);
 
-//        brushPanel = (ViewGroup) view.findViewById(R.id.brushPanel);
-//        brushPanel.setVisibility(View.GONE);
-//
-//        smallestButton = (ImageButton) view.findViewById(R.id.smallestBrushButton);
-//        smallestButton.setOnClickListener(this);
-//
-//        smallButton = (ImageButton) view.findViewById(R.id.smallBrushButton);
-//        smallButton.setOnClickListener(this);
-//
-//        smallLargeButton = (ImageButton) view.findViewById(R.id.smallLargeBrushButton);
-//        smallLargeButton.setOnClickListener(this);
-//
-//        mediumButton = (ImageButton) view.findViewById(R.id.mediumBrushButton);
-//        mediumButton.setOnClickListener(this);
-//
-//        largeButton = (ImageButton) view.findViewById(R.id.largeBrushButton);
-//        largeButton.setOnClickListener(this);
-
         return view;
     }
 
     @Override
     public void onColorSelected(int color) {
         paintView.setDrawingColor(color);
-        paintView.setErase(false);
-        paintView.setEmptyPattern();
-        brushButton.setBackgroundResource(R.drawable.select_button_background);
-        eraserButton.setBackgroundResource(R.drawable.button_selector);
-        patternButton.setBackgroundResource(R.drawable.button_selector);
+
+        if (paintView.getDrawMode() != DrawModes.DRAW) {
+            paintView.setDrawMode(DrawModes.DRAW);
+            setBrushActive();
+        }
+//        paintView.setErase(false);
+//        paintView.setEmptyPattern();
+//        brushButton.setBackgroundResource(R.drawable.select_button_background);
+//        eraserButton.setBackgroundResource(R.drawable.button_selector);
+//        patternButton.setBackgroundResource(R.drawable.button_selector);
 //        setBrushColor();
     }
-
-    /*@Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.paint_fragment_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.color:
-                ColorDialogFragment colorDialog = new ColorDialogFragment();
-                colorDialog.show(getFragmentManager(), "color dialog");
-
-                return true;
-
-            case R.id.brush:
-
-                BrushDialogFragment brushDialog = new BrushDialogFragment();
-                brushDialog.show(getFragmentManager(), "brush dialog");
-
-                return true;
-
-            case R.id.eraser:
-
-                getPaintView().clear();
-
-                return true;
-
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-    */
 
     public PaintView getPaintView() {
         return paintView;
@@ -224,28 +178,25 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
     @Override
     public void onClick(View view) {
-        int brushSize;
 
         if (view.getId() == R.id.button_new) {
-            getPaintView().clear();
-//            if (showingBrushPanel) {
-//                hideBrushPanel();
-//            }
+            confirmClear();
         }
         else if (view.getId() == R.id.button_brush) {
 
-            brushButton.setBackgroundResource(R.drawable.select_button_background);
-            eraserButton.setBackgroundResource(R.drawable.button_selector);
-            patternButton.setBackgroundResource(R.drawable.button_selector);
+            setBrushActive();
 
-            if (paintView.isErase()) {
-                paintView.setErase(false);
-            }
+//            if (paintView.isErase()) {
+//                paintView.setErase(false);
+//            }
+//
+//            else if (paintView.isPattern()) {
+//                paintView.setEmptyPattern();
+//            }
 
-            else if (paintView.isPattern()) {
-                paintView.setEmptyPattern();
-            }
+//            paintView.setEmptyPattern();
 
+            paintView.setDrawMode(DrawModes.DRAW);
 
             BrushDialogFragment brushDialog = new BrushDialogFragment();
             brushDialog.show(getFragmentManager(), "brush dialog");
@@ -254,20 +205,16 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
         else if (view.getId() == R.id.button_eraser) {
 
-            paintView.setErase(true);
-            paintView.setEmptyPattern();
+//            paintView.setErase(true);
+//            paintView.setEmptyPattern();
 
-            eraserButton.setBackgroundResource(R.drawable.select_button_background);
-            brushButton.setBackgroundResource(R.drawable.button_selector);
-            patternButton.setBackgroundResource(R.drawable.button_selector);
+            paintView.setDrawMode(DrawModes.ERASE);
+
+            setEraserActive();
 
             EraserDialogFragment eraserDialog = new EraserDialogFragment();
             eraserDialog.show(getFragmentManager(), "brush dialog");
 
-//            if (showingBrushPanel) {
-//                hideBrushPanel();
-//            }
-//            eraserButton.setBackgroundResource(R.drawable.red_border);
         }
         else if (view.getId() == R.id.button_undo) {
             paintView.undo();
@@ -276,15 +223,14 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
         else if (view.getId() == R.id.button_pattern) {
 
-            paintView.setPatternMode(true);
+//            paintView.setPatternMode(true);
 
-            patternButton.setBackgroundResource(R.drawable.select_button_background);
-            brushButton.setBackgroundResource(R.drawable.button_selector);
-            eraserButton.setBackgroundResource(R.drawable.button_selector);
+            paintView.setDrawMode(DrawModes.PATTERN);
+
+            setPatternActive();
 
             PatternDialogFragment patternDialog = new PatternDialogFragment();
             patternDialog.show(getFragmentManager(), "pattern dialog");
-
         }
 
         else if (view.getId() == R.id.button_save) {
@@ -309,7 +255,25 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         }
     }
 
+    //TODO Реализовать метод для запроса разрешения на запись в Android 6.0 и выше
+    @TargetApi(23)
+    private void checkPermission() {
+        if (getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED) {
+
+            if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+            }
+
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+        }
+
+        return;
+    }
+
     private void saveDrawing() {
+
         paintView.setDrawingCacheEnabled(true);
 
         String imgSaved = MediaStore.Images.Media.insertImage(this.getContext().getContentResolver(),
@@ -329,5 +293,34 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
     private void selectBrush(ImageButton button) {
         button.setBackgroundResource(R.drawable.brush_button_selected_border);
+    }
+
+    private void confirmClear() {
+        ClearDialogFragment clearDialogFragment = new ClearDialogFragment();
+        clearDialogFragment.setTargetFragment(MainActivityFragment.this, 300);
+        clearDialogFragment.show(getFragmentManager(), "clear dialog");
+    }
+
+    public void setBrushActive() {
+        brushButton.setBackgroundResource(R.drawable.select_button_background);
+        eraserButton.setBackgroundResource(R.drawable.button_selector);
+        patternButton.setBackgroundResource(R.drawable.button_selector);
+    }
+
+    public void setEraserActive() {
+        brushButton.setBackgroundResource(R.drawable.button_selector);
+        eraserButton.setBackgroundResource(R.drawable.select_button_background);
+        patternButton.setBackgroundResource(R.drawable.button_selector);
+    }
+
+    public void setPatternActive() {
+        brushButton.setBackgroundResource(R.drawable.button_selector);
+        eraserButton.setBackgroundResource(R.drawable.button_selector);
+        patternButton.setBackgroundResource(R.drawable.select_button_background);
+    }
+
+    @Override
+    public void onClearDrawing() {
+        setBrushActive();
     }
 }

@@ -11,4 +11,7 @@
     <string name="set_brush_width">Select</string>
     <string name="save_drawing">Save drawing</string>
     <string name="save_drawing_message">Save drawing to the Gallery?</string>
+    <string name="clear_drawing_message">Clear the drawing?</string>
+    <string name="button_clear">Clear</string>
+    <string name="cancel">Cancel</string>
 </resources>

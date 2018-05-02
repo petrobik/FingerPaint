@@ -8,9 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -20,9 +18,6 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
 
 /**
  * Created by Peter on 14.03.2018.
@@ -65,6 +60,8 @@ public class PaintView extends View {
     private int backgroundColor = 0xFFFFFFFF;
     private int eraseColor = 0xFFFFFFFF;
 
+    private int drawMode = DrawModes.DRAW;
+
     boolean erase = false;
     boolean isPattern = false;
 
@@ -100,14 +97,29 @@ public class PaintView extends View {
 //            drawPaint = new Paint();
             drawPaint.setAntiAlias(true);
 
-            if (!erase) {
-                drawPaint.setColor(paintColor);
-                drawPaint.setStrokeWidth(strokeWidth);
+            switch (drawMode) {
+                case DrawModes.DRAW:
+                    drawPaint.setColor(paintColor);
+                    drawPaint.setStrokeWidth(strokeWidth);
+                    break;
+                case DrawModes.ERASE:
+                    drawPaint.setColor(eraseColor);
+                    drawPaint.setStrokeWidth(eraserWidth);
+                    break;
+                case DrawModes.PATTERN:
+//                    drawPaint.setColor(paintColor);
+//                    drawPaint.setStrokeWidth(strokeWidth);
+                    break;
             }
-            else {
-                drawPaint.setColor(eraseColor);
-                drawPaint.setStrokeWidth(eraserWidth);
-            }
+
+//            if (!erase) {
+//                drawPaint.setColor(paintColor);
+//                drawPaint.setStrokeWidth(strokeWidth);
+//            }
+//            else {
+//                drawPaint.setColor(eraseColor);
+//                drawPaint.setStrokeWidth(eraserWidth);
+//            }
 
             drawPaint.setStyle(Paint.Style.STROKE);
             drawPaint.setStrokeJoin(Paint.Join.ROUND);
@@ -126,19 +138,6 @@ public class PaintView extends View {
 
     private void drawPaths(Canvas canvas) {
 
-//        int i = 0;
-//        for (Path p: paths) {
-//            canvas.drawPath(p, paints.get(i));
-//            i++;
-//        }
-
-//        for (Path p: paths) {
-//            drawPaint.setColor(colorsMap.get(p));
-//            drawPaint.setStrokeWidth(widthMap.get(p));
-//            drawPaint.setShader(patternMap.get(p));
-//            canvas.drawPath(p, drawPaint);
-//        }
-
         for (Path p: paths) {
 //            currentStroke = strokeMap.get(p);
             drawPaint.setColor(strokeMap.get(p).getColor());
@@ -146,13 +145,6 @@ public class PaintView extends View {
             drawPaint.setShader(strokeMap.get(p).getPattern());
             canvas.drawPath(p, drawPaint);
         }
-
-
-
-//        for (Path p: paths) {
-//            canvas.drawPath(p, drawPaint);
-//        }
-
     }
 
     @Override
@@ -165,15 +157,32 @@ public class PaintView extends View {
 
 //        canvas.drawPath(drawPath, drawPaint);
 
-        if (!erase) {
-            drawPaint.setColor(paintColor);
-            drawPaint.setStrokeWidth(strokeWidth);
-        }
-        else {
-            drawPaint.setColor(eraseColor);
-            drawPaint.setStrokeWidth(eraserWidth);
+        switch (drawMode) {
+            case DrawModes.DRAW:
+                drawPaint.setColor(paintColor);
+                drawPaint.setStrokeWidth(strokeWidth);
+                patternShader = null;
+                break;
+            case DrawModes.ERASE:
+                drawPaint.setColor(eraseColor);
+                drawPaint.setStrokeWidth(eraserWidth);
+                patternShader = null;
+                break;
+            case DrawModes.PATTERN:
+//                drawPaint.setColor(paintColor);
+                drawPaint.setStrokeWidth(strokeWidth);
+                break;
         }
 
+//        if (!erase) {
+//            drawPaint.setColor(paintColor);
+//            drawPaint.setStrokeWidth(strokeWidth);
+//        }
+//        else {
+//            drawPaint.setColor(eraseColor);
+//            drawPaint.setStrokeWidth(eraserWidth);
+//        }
+//
         drawPaint.setShader(patternShader);
 
         canvas.drawPath(drawPath, drawPaint);
@@ -305,18 +314,39 @@ public class PaintView extends View {
 
         currentStroke.setPattern(patternShader);
 
-        if (!erase) {
-            currentStroke.setColor(paintColor);
-            currentStroke.setBrushSize(strokeWidth);
-            strokeMap.put(drawPath, currentStroke);
-//            colorsMap.put(drawPath, paintColor);
+        switch (drawMode) {
+            case DrawModes.DRAW:
+                currentStroke.setColor(paintColor);
+                currentStroke.setBrushSize(strokeWidth);
+//                strokeMap.put(drawPath, currentStroke);
+                break;
+            case DrawModes.ERASE:
+                currentStroke.setColor(eraseColor);
+                currentStroke.setBrushSize(eraserWidth);
+//                strokeMap.put(drawPath, currentStroke);
+                break;
+            case DrawModes.PATTERN:
+                currentStroke.setColor(paintColor);
+                currentStroke.setBrushSize(strokeWidth);
+//                strokeMap.put(drawPath, currentStroke);
+//                drawPaint.setShader(patternShader);
+                break;
         }
-        else {
-            currentStroke.setColor(eraseColor);
-            currentStroke.setBrushSize(eraserWidth);
-            strokeMap.put(drawPath, currentStroke);
-//            colorsMap.put(drawPath, eraseColor);
-        }
+
+        strokeMap.put(drawPath, currentStroke);
+
+//        if (!erase) {
+//            currentStroke.setColor(paintColor);
+//            currentStroke.setBrushSize(strokeWidth);
+//            strokeMap.put(drawPath, currentStroke);
+////            colorsMap.put(drawPath, paintColor);
+//        }
+//        else {
+//            currentStroke.setColor(eraseColor);
+//            currentStroke.setBrushSize(eraserWidth);
+//            strokeMap.put(drawPath, currentStroke);
+////            colorsMap.put(drawPath, eraseColor);
+//        }
 
 //        widthMap.put(drawPath, strokeWidth);
 //        patternMap.put(drawPath, patternShader);
@@ -340,18 +370,11 @@ public class PaintView extends View {
         strokeMap.clear();
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
         canvasBitmap.eraseColor(Color.WHITE);
-        setErase(false);
+//        setErase(false);
+        setDrawMode(DrawModes.DRAW);
 //        setEmptyPattern();
         invalidate();
     }
-
-//    public void clear() {
-//        paths.clear();
-//        undoPaths.clear();
-//        drawPath.reset();
-////        bitmap.eraseColor(Color.TRANSPARENT);
-//        invalidate();
-//    }
 
     public void setDrawingColor(int color) {
 
@@ -367,14 +390,25 @@ public class PaintView extends View {
 
     public void setLineWidth(int width) {
 
-        if (!erase) {
-            strokeWidth = width;
-            drawPaint.setStrokeWidth(strokeWidth);
+        switch (drawMode) {
+            case DrawModes.DRAW:
+                strokeWidth = width;
+                drawPaint.setStrokeWidth(strokeWidth);
+                break;
+            case DrawModes.ERASE:
+                eraserWidth = width;
+                drawPaint.setStrokeWidth(eraserWidth);
+                break;
         }
-        else {
-            eraserWidth = width;
-            drawPaint.setStrokeWidth(eraserWidth);
-        }
+
+//        if (!erase) {
+//            strokeWidth = width;
+//            drawPaint.setStrokeWidth(strokeWidth);
+//        }
+//        else {
+//            eraserWidth = width;
+//            drawPaint.setStrokeWidth(eraserWidth);
+//        }
     }
 
     public void setBackgroundColor(int color) {
@@ -398,36 +432,36 @@ public class PaintView extends View {
         return (int) drawPaint.getStrokeWidth();
     }
 
-    public void setErase(boolean isErase) {
+//    public void setErase(boolean isErase) {
+//
+//        erase = isErase;
+//
+//        if (erase) {
+//            drawPaint.setColor(eraseColor);
+//            drawPaint.setStrokeWidth(eraserWidth);
+//
+//        }
+//        else {
+//            drawPaint.setColor(paintColor);
+//            drawPaint.setStrokeWidth(strokeWidth);
+//        }
+//
+//    }
 
-        erase = isErase;
+//    public void setPatternMode(boolean pattern) {
+//
+//        isPattern = pattern;
+//
+//    }
 
-        if (erase) {
-            drawPaint.setColor(eraseColor);
-            drawPaint.setStrokeWidth(eraserWidth);
-
-        }
-        else {
-            drawPaint.setColor(paintColor);
-            drawPaint.setStrokeWidth(strokeWidth);
-        }
-
-    }
-
-    public void setPatternMode(boolean pattern) {
-
-        isPattern = pattern;
-
-    }
-
-    public boolean isErase() {
-        return erase;
-    }
-
-    public boolean isPattern() {
-
-        return isPattern;
-    }
+//    public boolean isErase() {
+//        return erase;
+//    }
+//
+//    public boolean isPattern() {
+//
+//        return isPattern;
+//    }
 
     public void undo() {
 
@@ -455,16 +489,25 @@ public class PaintView extends View {
         patternBitmap = BitmapFactory.decodeResource(getResources(), patternId);
         patternShader = new BitmapShader(patternBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
 
-        drawPaint.setColor(0xFFFFFFFF);
+//        drawPaint.setColor(0xFFFFFFFF);
         drawPaint.setShader(patternShader);
-
-        isPattern = true;
+//
+//        isPattern = true;
     }
 
-    public void setEmptyPattern() {
+//    public void setEmptyPattern() {
+//
+//        patternShader = null;
+//        if (isPattern)
+//            isPattern = false;
+//    }
 
-        patternShader = null;
-        isPattern = false;
+    public void setDrawMode(int drawMode) {
+        this.drawMode = drawMode;
+    }
+
+    public int getDrawMode() {
+        return drawMode;
     }
 
 }

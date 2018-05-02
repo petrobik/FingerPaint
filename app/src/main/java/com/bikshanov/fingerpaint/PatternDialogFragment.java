@@ -19,6 +19,8 @@ public class PatternDialogFragment extends DialogFragment implements View.OnClic
     private ImageButton flowersButton, floralButton, starsButton, grassButton, cloudsButton,
             brickButton, partyButton, leavesButton, woodButton, butterflyButton;
 
+    private int result = 1;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -81,6 +83,9 @@ public class PatternDialogFragment extends DialogFragment implements View.OnClic
 
     @Override
     public void onClick(View view) {
+
+
+
 
         if (view.getId() == R.id.floralButton) {
 

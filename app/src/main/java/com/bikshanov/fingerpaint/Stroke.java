@@ -13,6 +13,12 @@ public class Stroke {
 
     }
 
+    public Stroke(int color, int brushSize, BitmapShader pattern) {
+        this.color = color;
+        this.brushSize = brushSize;
+        this.pattern = pattern;
+    }
+
     public int getColor() {
         return color;
     }
