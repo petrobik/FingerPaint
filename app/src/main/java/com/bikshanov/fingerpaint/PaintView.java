@@ -10,14 +10,20 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.Shader;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * Created by Peter on 14.03.2018.
@@ -510,4 +516,47 @@ public class PaintView extends View {
         return drawMode;
     }
 
+    public Bitmap getCanvasBitmap() {
+        return canvasBitmap;
+    }
+
+    public void saveDrawing() {
+//        final String fileName = System.currentTimeMillis() + ".png";
+//
+//        setDrawingCacheEnabled(true);
+//        setDrawingCacheQuality(DRAWING_CACHE_QUALITY_HIGH);
+//
+//        String location = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), getDrawingCache(), fileName,  "Drawing");
+//
+//        if (location != null) {
+//            Toast message = Toast.makeText(getContext(), "Drawing saved", Toast.LENGTH_SHORT);
+//            message.show();
+//        }
+//        else {
+//            Toast message = Toast.makeText(getContext(), "Drawing not saved", Toast.LENGTH_SHORT);
+//            message.show();
+//        }
+
+        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/FingerPaint";
+        File dir = new File(filePath);
+
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        String fileName = UUID.randomUUID().toString().concat(".png");
+        File file = new File(dir, fileName);
+
+        FileOutputStream fout;
+
+        try {
+            fout = new FileOutputStream(file);
+            canvasBitmap.compress(Bitmap.CompressFormat.PNG, 85, fout);
+            fout.flush();
+            fout.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

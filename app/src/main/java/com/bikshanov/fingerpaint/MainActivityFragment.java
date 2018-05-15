@@ -6,10 +6,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -21,6 +23,8 @@ import android.widget.Toast;
 
 import com.thebluealliance.spectrum.SpectrumPalette;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.UUID;
 
 /**
@@ -241,7 +245,7 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
             saveDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    saveDrawing();
+                    paintView.saveDrawing();
                 }
             });
             saveDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -255,6 +259,7 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         }
     }
 
+    //TODO Реализовать метод для запроса разрешения на запись в Android 6.0 и выше
     //TODO Реализовать метод для запроса разрешения на запись в Android 6.0 и выше
     @TargetApi(23)
     private void checkPermission() {
@@ -274,21 +279,43 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
     private void saveDrawing() {
 
-        paintView.setDrawingCacheEnabled(true);
+//        paintView.setDrawingCacheEnabled(true);
+//
+//        String imgSaved = MediaStore.Images.Media.insertImage(this.getContext().getContentResolver(),
+//                paintView.getDrawingCache(), UUID.randomUUID().toString() + ".png", "drawing");
+//
+//        if (imgSaved != null) {
+//            Toast savedToast = Toast.makeText(getContext(), "Drawing saved", Toast.LENGTH_SHORT);
+//            savedToast.show();
+//        }
+//        else {
+//            Toast unsavedToast = Toast.makeText(getContext(), "Drawing not saved", Toast.LENGTH_SHORT);
+//            unsavedToast.show();
+//        }
+//
+//        paintView.destroyDrawingCache();
 
-        String imgSaved = MediaStore.Images.Media.insertImage(this.getContext().getContentResolver(),
-                paintView.getDrawingCache(), UUID.randomUUID().toString() + ".png", "drawing");
+        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/FingerPaint";
+        File dir = new File(filePath);
 
-        if (imgSaved != null) {
-            Toast savedToast = Toast.makeText(getContext(), "Drawing saved", Toast.LENGTH_SHORT);
-            savedToast.show();
+        if (!dir.exists()) {
+            dir.mkdirs();
         }
-        else {
-            Toast unsavedToast = Toast.makeText(getContext(), "Drawing not saved", Toast.LENGTH_SHORT);
-            unsavedToast.show();
-        }
 
-        paintView.destroyDrawingCache();
+        String fileName = UUID.randomUUID().toString().concat(".png");
+        File file = new File(dir, fileName);
+
+        FileOutputStream fout;
+
+        try {
+            fout = new FileOutputStream(file);
+            paintView.getCanvasBitmap().compress(Bitmap.CompressFormat.PNG, 85, fout);
+            fout.flush();
+            fout.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void selectBrush(ImageButton button) {
