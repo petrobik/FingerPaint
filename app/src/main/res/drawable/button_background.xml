@@ -5,7 +5,7 @@
     <size android:width="60dp"
         android:height="60dp"/>
     <gradient android:startColor="@color/md_cyan_50"
-        android:endColor="@color/md_cyan_300"
+        android:endColor="#BCE2EC"
         android:angle="270"/>
     <padding android:left="7dp"
         android:bottom="7dp"

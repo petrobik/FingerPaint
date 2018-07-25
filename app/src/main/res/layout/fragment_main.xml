@@ -5,31 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/md_blue_100">
+    android:background="@drawable/wooden">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:background="@color/md_white"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp">
+        android:background="@drawable/wooden">
 
         <HorizontalScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scrollbars="none"
         android:fillViewport="true"
-        android:background="@color/md_white"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center">
 
             <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:orientation="horizontal"
-            android:background="@color/md_white"
             android:layout_marginBottom="2dp"
             android:layout_marginTop="2dp">
 
@@ -92,31 +87,44 @@
         </HorizontalScrollView>
     </LinearLayout>
 
-    <com.bikshanov.fingerpaint.PaintView
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/paintView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:context="com.bikshanov.fingerpaint.MainActivityFragment"
-        tools:showIn="@layout/activity_main"
-        android:layout_margin="4dp">
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:background="@color/md_blue_grey_300">
 
-    </com.bikshanov.fingerpaint.PaintView>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp">
+
+            <com.bikshanov.fingerpaint.PaintView
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/paintView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.bikshanov.fingerpaint.MainActivityFragment"
+                tools:showIn="@layout/activity_main">
+
+            </com.bikshanov.fingerpaint.PaintView>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@color/md_white"
-        android:layout_marginBottom="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginLeft="4dp">
+        android:layout_height="60dp"
+        android:background="@drawable/wooden">
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            android:layout_gravity="center">
 
             <com.thebluealliance.spectrum.SpectrumPalette
                 android:id="@+id/palette"
@@ -124,13 +132,11 @@
                 android:layout_height="wrap_content"
                 app:spectrum_autoPadding="true"
                 app:spectrum_colors="@array/demo_colors"
-                app:spectrum_columnCount="20">
+                app:spectrum_columnCount="20"
+                app:spectrum_outlineWidth="2dp">
 
             </com.thebluealliance.spectrum.SpectrumPalette>
 
         </HorizontalScrollView>
-
     </LinearLayout>
-
 </LinearLayout>
-

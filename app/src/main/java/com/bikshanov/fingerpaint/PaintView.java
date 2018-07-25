@@ -1,6 +1,7 @@
 package com.bikshanov.fingerpaint;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
@@ -9,11 +10,15 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,7 +26,9 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -520,15 +527,25 @@ public class PaintView extends View {
         return canvasBitmap;
     }
 
+    private void addToGallery(String path) {
+        File file = new File(path);
+        Uri contentUri = Uri.fromFile(file);
+//        Uri contentUri = Uri.parse("file://" + path);
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, contentUri);
+//        mediaScanIntent.setData(contentUri);
+        getContext().sendBroadcast(mediaScanIntent);
+    }
+
     public void saveDrawing() {
 //        final String fileName = System.currentTimeMillis() + ".png";
-//
-//        setDrawingCacheEnabled(true);
+////
+        setDrawingCacheEnabled(true);
 //        setDrawingCacheQuality(DRAWING_CACHE_QUALITY_HIGH);
-//
+////
 //        String location = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), getDrawingCache(), fileName,  "Drawing");
-//
+////
 //        if (location != null) {
+//            addToGallery(location);
 //            Toast message = Toast.makeText(getContext(), "Drawing saved", Toast.LENGTH_SHORT);
 //            message.show();
 //        }
@@ -537,23 +554,36 @@ public class PaintView extends View {
 //            message.show();
 //        }
 
-        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/FingerPaint";
+
+
+        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/FingerPaint";
         File dir = new File(filePath);
 
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
-        String fileName = UUID.randomUUID().toString().concat(".png");
+        String fileName = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()).concat(".png");
         File file = new File(dir, fileName);
 
         FileOutputStream fout;
 
         try {
             fout = new FileOutputStream(file);
-            canvasBitmap.compress(Bitmap.CompressFormat.PNG, 85, fout);
+            getDrawingCache().compress(Bitmap.CompressFormat.PNG, 85, fout);
             fout.flush();
             fout.close();
+            setDrawingCacheEnabled(false);
+            addToGallery(file.getAbsolutePath());
+
+//            MediaScannerConnection.scanFile(getContext(), new String[]{file.toString()}, null,
+//                    new MediaScannerConnection.OnScanCompletedListener() {
+//                        @Override
+//                        public void onScanCompleted(String s, Uri uri) {
+//                            Log.i("SDCard", "Scanned: " + s + ":");
+//                            Log.i("SDCard", "-> uri=" + uri);
+//                        }
+//                    });
         }
         catch (Exception e) {
             e.printStackTrace();

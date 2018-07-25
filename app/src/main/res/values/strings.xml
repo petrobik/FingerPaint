@@ -14,4 +14,6 @@
     <string name="clear_drawing_message">Clear the drawing?</string>
     <string name="button_clear">Clear</string>
     <string name="cancel">Cancel</string>
+    <string name="permission_explanation">To save an image, the app requires permission to write to external storage</string>
 </resources>
+

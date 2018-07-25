@@ -11,6 +11,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -245,7 +246,7 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
             saveDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    paintView.saveDrawing();
+                    checkPermission();
                 }
             });
             saveDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -259,22 +260,38 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         }
     }
 
-    //TODO Реализовать метод для запроса разрешения на запись в Android 6.0 и выше
-    //TODO Реализовать метод для запроса разрешения на запись в Android 6.0 и выше
     @TargetApi(23)
     private void checkPermission() {
-        if (getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-                PackageManager.PERMISSION_GRANTED) {
+        if ((Build.VERSION.SDK_INT >= 23) && (getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED)) {
 
-            if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                builder.setMessage(R.string.permission_explanation);
+                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                requestPermissions(new String[]{
+                                                Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        SAVE_IMAGE_PERMISSION_REQUEST_CODE);
+                            }
+                        }
+                );
+
+                builder.create().show();
+
+            } else {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        SAVE_IMAGE_PERMISSION_REQUEST_CODE);
             }
-
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
 
         }
 
-        return;
+         else {
+            paintView.saveDrawing();
+        }
     }
 
     private void saveDrawing() {
