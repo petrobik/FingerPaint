@@ -8,7 +8,7 @@
     <string name="select_brush">Выбор кисти</string>
     <string name="select_eraser">Выбор ластика</string>
     <string name="select_pattern">Выбор текстуры</string>
-    <string name="set_brush_width">Выбрать</string>
+    <string name="set_brush_width">OK</string>
     <string name="save_drawing">Сохранить рисунок</string>
     <string name="save_drawing_message">Сохранить рисунок?</string>
     <string name="clear_drawing_message">Удалить рисунок?</string>

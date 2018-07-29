@@ -3,7 +3,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:padding="8dp">
 
     <ImageButton
         android:id="@+id/smallestEraserButton"
@@ -11,8 +12,8 @@
         android:layout_width="200dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/smallest"
-        android:background="@drawable/transparent"
-        android:layout_marginTop="4dp"/>
+        android:background="@drawable/transparent_dark"
+        android:layout_marginBottom="8dp"/>
 
     <ImageButton
         android:id="@+id/smallEraserButton"
@@ -20,8 +21,8 @@
         android:layout_width="200dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/small"
-        android:background="@drawable/transparent"
-        android:layout_marginTop="4dp"/>
+        android:background="@drawable/transparent_dark"
+        android:layout_marginBottom="8dp"/>
 
     <ImageButton
         android:id="@+id/largeEraserButton"
@@ -29,8 +30,8 @@
         android:layout_width="200dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/large"
-        android:background="@drawable/transparent"
-        android:layout_marginTop="4dp"/>
+        android:background="@drawable/transparent_dark"
+        android:layout_marginBottom="8dp"/>
 
     <ImageButton
         android:id="@+id/largestEraserButton"
@@ -38,9 +39,8 @@
         android:layout_width="200dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/largest"
-        android:background="@drawable/transparent"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"/>
+        android:background="@drawable/transparent_dark"
+        android:layout_marginBottom="8dp"/>
 
 </LinearLayout>
 

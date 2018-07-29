@@ -8,6 +8,7 @@ public class Stroke {
     private int color;
     private int brushSize;
     private BitmapShader pattern;
+    private int opacity;
 
     public Stroke() {
 
@@ -17,6 +18,13 @@ public class Stroke {
         this.color = color;
         this.brushSize = brushSize;
         this.pattern = pattern;
+    }
+
+    public Stroke(int color, int brushSize, BitmapShader pattern, int opacity) {
+        this.color = color;
+        this.brushSize = brushSize;
+        this.pattern = pattern;
+        this.opacity = opacity;
     }
 
     public int getColor() {
@@ -41,5 +49,13 @@ public class Stroke {
 
     public void setPattern(BitmapShader pattern) {
         this.pattern = pattern;
+    }
+
+    public int getOpacity() {
+        return opacity;
+    }
+
+    public void setOpacity(int opacity) {
+        this.opacity = opacity;
     }
 }

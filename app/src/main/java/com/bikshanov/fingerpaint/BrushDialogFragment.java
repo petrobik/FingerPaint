@@ -3,18 +3,19 @@ package com.bikshanov.fingerpaint;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatSeekBar;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 
 /**
  * Created by Peter on 14.03.2018.
@@ -22,110 +23,46 @@ import android.widget.ImageButton;
 
 public class BrushDialogFragment extends DialogFragment implements View.OnClickListener {
 
-    private ImageButton smallestBrushButton, smallBrushButton, largeBrushButton, largestBrushButton;
+    private ImageButton brushWidthButton;
     private Path brushPath;
-    private Paint smallestPaint, smallPaint, largePaint, largestPaint;
-    private Bitmap smallestBitmap, smallBitmap, largeBitmap, largestBitmap;
-    private Canvas smallestCanvas, smallCanvas, largeCanvas, largestCanvas;
+    private Paint brushWidthPaint;
+    private Bitmap brushWidthBitmap;
+    private Canvas brushWidthCanvas;
+    private SeekBar brushWidthSeekBar;
+    private int progressOffset = 20;
+    private int progressValue;
+
+    private int min = 20;
+    private int max = 70;
+    private int step = 1;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        View brushDialogView = getActivity().getLayoutInflater().inflate(R.layout.fragment_brush, null);
-        builder.setView(brushDialogView);
-        builder.setTitle(R.string.select_brush);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomDialogTheme);
+        View brushWidthDialogView = getActivity().getLayoutInflater().inflate(R.layout.fragment_brush_width, null);
+        builder.setView(brushWidthDialogView);
+//        builder.setTitle(R.string.select_brush);
 
-        smallestBrushButton = (ImageButton) brushDialogView.findViewById(R.id.smallestEraserButton);
-        smallBrushButton = (ImageButton) brushDialogView.findViewById(R.id.smallEraserButton);
-//        mediumBrushButton = (ImageButton) brushDialogView.findViewById(R.id.mediumEraserButton);
-        largeBrushButton = (ImageButton) brushDialogView.findViewById(R.id.largeEraserButton);
-        largestBrushButton = (ImageButton) brushDialogView.findViewById(R.id.largestEraserButton);
+        brushWidthButton = (ImageButton) brushWidthDialogView.findViewById(R.id.smallestEraserButton);
 
-        smallestBrushButton.setOnClickListener(this);
-        smallBrushButton.setOnClickListener(this);
-//        mediumBrushButton.setOnClickListener(this);
-        largeBrushButton.setOnClickListener(this);
-        largestBrushButton.setOnClickListener(this);
+        brushWidthButton.setOnClickListener(this);
 
         final PaintView paintView = getPaintFragment().getPaintView();
 
-//        smallestBrushButton.getDrawable().setColorFilter(paintView.getDrawingColor(), PorterDuff.Mode.SRC_IN);
-//        smallBrushButton.getDrawable().setColorFilter(paintView.getDrawingColor(), PorterDuff.Mode.SRC_IN);
-////        mediumBrushButton.getDrawable().setColorFilter(paintView.getDrawingColor(), PorterDuff.Mode.SRC_IN);
-//        largeBrushButton.getDrawable().setColorFilter(paintView.getDrawingColor(), PorterDuff.Mode.SRC_IN);
-//        largestBrushButton.getDrawable().setColorFilter(paintView.getDrawingColor(), PorterDuff.Mode.SRC_IN);
+        brushWidthSeekBar = (SeekBar) brushWidthDialogView.findViewById(R.id.brushWidthSeekBar);
+        brushWidthSeekBar.setOnSeekBarChangeListener(brushWidthChanged);
 
-        smallestBitmap = Bitmap.createBitmap(400, 120, Bitmap.Config.ARGB_8888);
-        smallBitmap = Bitmap.createBitmap(400, 120, Bitmap.Config.ARGB_8888);
-        largeBitmap = Bitmap.createBitmap(400, 120, Bitmap.Config.ARGB_8888);
-        largestBitmap = Bitmap.createBitmap(400, 120, Bitmap.Config.ARGB_8888);
+        brushWidthSeekBar.setMax((max - min) / step);
 
-        brushPath = new Path();
-        brushPath.moveTo(50, 70);
-        brushPath.cubicTo(150, 10, 250, 110, 350, 50);
+        brushWidthSeekBar.setProgress(paintView.getLineWidth() - min);
 
-        smallestPaint = new Paint();
-        smallPaint = new Paint();
-        largePaint = new Paint();
-        largestPaint = new Paint();
-
-        smallestPaint.setColor(paintView.getDrawingColor());
-        smallestPaint.setAntiAlias(true);
-        smallestPaint.setStrokeCap(Paint.Cap.ROUND);
-        smallestPaint.setStrokeJoin(Paint.Join.ROUND);
-        smallestPaint.setStyle(Paint.Style.STROKE);
-        smallestPaint.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.brush_smallest));
-
-        smallPaint.setColor(paintView.getDrawingColor());
-        smallPaint.setAntiAlias(true);
-        smallPaint.setStrokeCap(Paint.Cap.ROUND);
-        smallPaint.setStrokeJoin(Paint.Join.ROUND);
-        smallPaint.setStyle(Paint.Style.STROKE);
-        smallPaint.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.brush_small));
-
-        largePaint.setColor(paintView.getDrawingColor());
-        largePaint.setAntiAlias(true);
-        largePaint.setStrokeCap(Paint.Cap.ROUND);
-        largePaint.setStrokeJoin(Paint.Join.ROUND);
-        largePaint.setStyle(Paint.Style.STROKE);
-        largePaint.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.brush_large));
-
-        largestPaint.setColor(paintView.getDrawingColor());
-        largestPaint.setAntiAlias(true);
-        largestPaint.setStrokeCap(Paint.Cap.ROUND);
-        largestPaint.setStrokeJoin(Paint.Join.ROUND);
-        largestPaint.setStyle(Paint.Style.STROKE);
-        largestPaint.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.brush_largest));
-
-        smallestCanvas = new Canvas(smallestBitmap);
-        smallCanvas = new Canvas(smallBitmap);
-        largeCanvas = new Canvas(largeBitmap);
-        largestCanvas = new Canvas(largestBitmap);
-
-        smallestCanvas.drawPath(brushPath, smallestPaint);
-        smallestBrushButton.setImageBitmap(smallestBitmap);
-
-        smallCanvas.drawPath(brushPath, smallPaint);
-        smallBrushButton.setImageBitmap(smallBitmap);
-
-        largeCanvas.drawPath(brushPath, largePaint);
-        largeBrushButton.setImageBitmap(largeBitmap);
-
-        largestCanvas.drawPath(brushPath, largestPaint);
-        largestBrushButton.setImageBitmap(largestBitmap);
-
-
-//        final SeekBar brushWidthSeekBar = (SeekBar) brushDialogView.findViewById(R.id.brushWidthSeekBar);
-//        brushWidthSeekBar.setOnSeekBarChangeListener(brushWidthChanged);
-//        brushWidthSeekBar.setProgress(paintView.getLineWidth());
-
-//        builder.setPositiveButton(R.string.set_brush_width,
-//                new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        paintView.setLineWidth(brushWidthSeekBar.getProgress());
-//                    }
-//                });
+        builder.setPositiveButton(R.string.set_brush_width,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        paintView.setLineWidth(brushWidthSeekBar.getProgress() + min);
+                    }
+                });
 
         return builder.create();
     }
@@ -161,58 +98,58 @@ public class BrushDialogFragment extends DialogFragment implements View.OnClickL
 
         int brushSize;
 
-        if (view.getId() == R.id.smallestEraserButton) {
+        brushSize = brushWidthSeekBar.getProgress() + min;
+        getPaintFragment().getPaintView().setLineWidth(brushSize);
+        dismiss();
+//        recycleBitmaps();
 
-            brushSize = getResources().getDimensionPixelSize(R.dimen.brush_smallest);
-            getPaintFragment().getPaintView().setLineWidth(brushSize);
-            dismiss();
-            recycleBitmaps();
-        }
-
-        else if (view.getId() == R.id.smallEraserButton) {
-
-            brushSize = getResources().getDimensionPixelSize(R.dimen.brush_small);
-            getPaintFragment().getPaintView().setLineWidth(brushSize);
-            dismiss();
-            recycleBitmaps();
-        }
-//        else if (view.getId() == R.id.mediumEraserButton) {
-//
-//            brushSize = getResources().getDimensionPixelSize(R.dimen.brush_medium);
-//            getPaintFragment().getPaintView().setLineWidth(brushSize);
-//            dismiss();
-//        }
-
-        else if (view.getId() == R.id.largeEraserButton) {
-
-            brushSize = getResources().getDimensionPixelSize(R.dimen.brush_large);
-            getPaintFragment().getPaintView().setLineWidth(brushSize);
-            dismiss();
-            recycleBitmaps();
-        }
-        else if (view.getId() == R.id.largestEraserButton) {
-
-            brushSize = getResources().getDimensionPixelSize(R.dimen.brush_largest);
-            getPaintFragment().getPaintView().setLineWidth(brushSize);
-            dismiss();
-            recycleBitmaps();
-        }
     }
 
     private void recycleBitmaps() {
-        if (!smallestBitmap.isRecycled()) {
-            smallestBitmap.recycle();
-        }
-        if (!smallBitmap.isRecycled()) {
-            smallBitmap.recycle();
-        }
-        if (!largeBitmap.isRecycled()) {
-            largeBitmap.recycle();
-        }
-        if (!largestBitmap.isRecycled()) {
-            largestBitmap.recycle();
+        if (!brushWidthBitmap.isRecycled()) {
+            brushWidthBitmap.recycle();
         }
 
         brushPath.reset();
     }
+
+    private final SeekBar.OnSeekBarChangeListener brushWidthChanged = new SeekBar.OnSeekBarChangeListener() {
+
+        final Bitmap bitmap = Bitmap.createBitmap(400, 120, Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bitmap);
+
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+
+            Paint paint = new Paint();
+            paint.setColor(getPaintFragment().getPaintView().getDrawingColor());
+            paint.setAlpha(getPaintFragment().getPaintView().getPaintOpacity());
+            paint.setStrokeCap(Paint.Cap.ROUND);
+            paint.setStrokeJoin(Paint.Join.ROUND);
+            paint.setStyle(Paint.Style.STROKE);
+
+            paint.setStrokeWidth(min + (progress * step));
+
+            bitmap.eraseColor(getResources().getColor(android.R.color.transparent));
+
+            brushPath = new Path();
+            brushPath.moveTo(50, 70);
+            brushPath.cubicTo(150, 10, 250, 110, 350, 50);
+
+            canvas.drawPath(brushPath, paint);
+            brushWidthButton.setImageBitmap(bitmap);
+
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    };
 }

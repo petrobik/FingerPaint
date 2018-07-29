@@ -29,13 +29,23 @@
             android:layout_marginTop="2dp">
 
                 <ImageButton
+                    android:id="@+id/button_pencil"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:src="@drawable/ic_pencil"
+                    android:background="@drawable/button_selector"
+                    android:padding="2dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginLeft="2dp"/>
+
+                <ImageButton
                     android:id="@+id/button_brush"
                     android:layout_width="52dp"
                     android:layout_height="52dp"
                     android:src="@drawable/ic_paint_brush_2"
                     android:background="@drawable/button_selector"
                     android:padding="2dp"
-                    android:layout_marginRight="2dp"
+                    android:layout_marginRight="4dp"
                     android:layout_marginLeft="2dp"/>
 
                 <ImageButton
@@ -45,7 +55,7 @@
                     android:src="@drawable/ic_eraser_3"
                     android:background="@drawable/button_selector"
                     android:padding="2dp"
-                    android:layout_marginRight="2dp"/>
+                    android:layout_marginRight="4dp"/>
 
                 <ImageButton
                     android:id="@+id/button_pattern"
@@ -54,16 +64,16 @@
                     android:src="@drawable/ic_flower"
                     android:background="@drawable/button_selector"
                     android:padding="2dp"
-                    android:layout_marginRight="2dp"/>
+                    android:layout_marginRight="4dp"/>
 
                 <ImageButton
                     android:id="@+id/button_undo"
                     android:layout_width="52dp"
                     android:layout_height="52dp"
-                    android:src="@drawable/ic_undo"
+                    android:src="@drawable/ic_turn"
                     android:background="@drawable/button_selector"
                     android:padding="2dp"
-                    android:layout_marginRight="2dp"/>
+                    android:layout_marginRight="4dp"/>
 
                 <ImageButton
                     android:id="@+id/button_new"
@@ -72,16 +82,16 @@
                     android:src="@drawable/ic_trash"
                     android:background="@drawable/button_selector"
                     android:padding="2dp"
-                    android:layout_marginRight="2dp"/>
+                    android:layout_marginRight="4dp"/>
 
                 <ImageButton
                     android:id="@+id/button_save"
                     android:layout_width="52dp"
                     android:layout_height="52dp"
-                    android:src="@drawable/ic_save"
+                    android:src="@drawable/ic_image"
                     android:background="@drawable/button_selector"
                     android:padding="2dp"
-                    android:layout_marginRight="2dp"/>
+                    android:layout_marginRight="4dp"/>
 
             </LinearLayout>
         </HorizontalScrollView>
@@ -132,8 +142,7 @@
                 android:layout_height="wrap_content"
                 app:spectrum_autoPadding="true"
                 app:spectrum_colors="@array/demo_colors"
-                app:spectrum_columnCount="20"
-                app:spectrum_outlineWidth="2dp">
+                app:spectrum_columnCount="20">
 
             </com.thebluealliance.spectrum.SpectrumPalette>
 

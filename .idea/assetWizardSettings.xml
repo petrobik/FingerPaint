@@ -76,11 +76,11 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="height" value="48" />
-                            <entry key="outputName" value="ic_pencil" />
+                            <entry key="height" value="36" />
+                            <entry key="outputName" value="ic_turn" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="D:\android\icons\pencil.svg" />
-                            <entry key="width" value="48" />
+                            <entry key="sourceFile" value="D:\android\icons\turn.svg" />
+                            <entry key="width" value="36" />
                           </map>
                         </option>
                       </PersistentState>

@@ -13,14 +13,12 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.thebluealliance.spectrum.SpectrumPalette;
 
@@ -39,7 +37,7 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
     private float currentAcceleration;
     private float lastAcceleration;
     private boolean dialogOnScreen = false;
-    ImageButton newButton, brushButton, eraserButton, undoButton, patternButton, saveButton;
+    ImageButton newButton, pencilButton, brushButton, eraserButton, undoButton, patternButton, saveButton;
 //    ImageButton smallestButton, smallButton, smallLargeButton, mediumButton, largeButton;
 
 //    private ViewGroup brushPanel;
@@ -133,6 +131,9 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         newButton = (ImageButton) view.findViewById(R.id.button_new);
         newButton.setOnClickListener(this);
 
+        pencilButton = (ImageButton) view.findViewById(R.id.button_pencil);
+        pencilButton.setOnClickListener(this);
+
         brushButton = (ImageButton) view.findViewById(R.id.button_brush);
         brushButton.setOnClickListener(this);
 
@@ -152,7 +153,7 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         currentAcceleration = SensorManager.GRAVITY_EARTH;
         lastAcceleration = SensorManager.GRAVITY_EARTH;
 
-        brushButton.setBackgroundResource(R.drawable.select_button_background);
+        pencilButton.setBackgroundResource(R.drawable.select_button_background);
 
         return view;
     }
@@ -161,13 +162,15 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
     public void onColorSelected(int color) {
         paintView.setDrawingColor(color);
 
-        if (paintView.getDrawMode() != DrawModes.DRAW) {
-            paintView.setDrawMode(DrawModes.DRAW);
-            setBrushActive();
+        if (paintView.getDrawMode() == DrawModes.PATTERN ||
+                paintView.getDrawMode() == DrawModes.ERASE) {
+            paintView.setDrawMode(DrawModes.PENCIL);
+            setPencilActive();
         }
+
 //        paintView.setErase(false);
 //        paintView.setEmptyPattern();
-//        brushButton.setBackgroundResource(R.drawable.select_button_background);
+//        pencilButton.setBackgroundResource(R.drawable.select_button_background);
 //        eraserButton.setBackgroundResource(R.drawable.button_selector);
 //        patternButton.setBackgroundResource(R.drawable.button_selector);
 //        setBrushColor();
@@ -187,9 +190,9 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         if (view.getId() == R.id.button_new) {
             confirmClear();
         }
-        else if (view.getId() == R.id.button_brush) {
+        else if (view.getId() == R.id.button_pencil) {
 
-            setBrushActive();
+            setPencilActive();
 
 //            if (paintView.isErase()) {
 //                paintView.setErase(false);
@@ -201,11 +204,25 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
 //            paintView.setEmptyPattern();
 
-            paintView.setDrawMode(DrawModes.DRAW);
+            paintView.setDrawMode(DrawModes.PENCIL);
 
             BrushDialogFragment brushDialog = new BrushDialogFragment();
+//            brushDialog.setCancelable(false);
             brushDialog.show(getFragmentManager(), "brush dialog");
 
+        }
+
+        else if (view.getId() == R.id.button_brush) {
+
+            setBrushActive();
+            paintView.setDrawMode(DrawModes.BRUSH);
+
+            BrushDialogFragment brushDialog = new BrushDialogFragment();
+//            brushDialog.setCancelable(false);
+            brushDialog.show(getFragmentManager(), "brush dialog");
+
+//            BrushWidthDialogFragment widthFragment = new BrushWidthDialogFragment();
+//            widthFragment.show(getFragmentManager(), "width dialog");
         }
 
         else if (view.getId() == R.id.button_eraser) {
@@ -217,8 +234,13 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
             setEraserActive();
 
-            EraserDialogFragment eraserDialog = new EraserDialogFragment();
-            eraserDialog.show(getFragmentManager(), "brush dialog");
+            BrushDialogFragment brushDialog = new BrushDialogFragment();
+//            brushDialog.setCancelable(false);
+            brushDialog.show(getFragmentManager(), "brush dialog");
+
+//            EraserDialogFragment eraserDialog = new EraserDialogFragment();
+////            eraserDialog.setCancelable(false);
+//            eraserDialog.show(getFragmentManager(), "brush dialog");
 
         }
         else if (view.getId() == R.id.button_undo) {
@@ -235,6 +257,7 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
             setPatternActive();
 
             PatternDialogFragment patternDialog = new PatternDialogFragment();
+//            patternDialog.setCancelable(false);
             patternDialog.show(getFragmentManager(), "pattern dialog");
         }
 
@@ -345,26 +368,36 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         clearDialogFragment.show(getFragmentManager(), "clear dialog");
     }
 
+    public void setPencilActive() {
+        pencilButton.setBackgroundResource(R.drawable.select_button_background);
+        eraserButton.setBackgroundResource(R.drawable.button_selector);
+        patternButton.setBackgroundResource(R.drawable.button_selector);
+        brushButton.setBackgroundResource(R.drawable.button_selector);
+    }
+
     public void setBrushActive() {
         brushButton.setBackgroundResource(R.drawable.select_button_background);
         eraserButton.setBackgroundResource(R.drawable.button_selector);
         patternButton.setBackgroundResource(R.drawable.button_selector);
+        pencilButton.setBackgroundResource(R.drawable.button_selector);
     }
 
     public void setEraserActive() {
-        brushButton.setBackgroundResource(R.drawable.button_selector);
+        pencilButton.setBackgroundResource(R.drawable.button_selector);
         eraserButton.setBackgroundResource(R.drawable.select_button_background);
         patternButton.setBackgroundResource(R.drawable.button_selector);
+        brushButton.setBackgroundResource(R.drawable.button_selector);
     }
 
     public void setPatternActive() {
-        brushButton.setBackgroundResource(R.drawable.button_selector);
+        pencilButton.setBackgroundResource(R.drawable.button_selector);
         eraserButton.setBackgroundResource(R.drawable.button_selector);
         patternButton.setBackgroundResource(R.drawable.select_button_background);
+        brushButton.setBackgroundResource(R.drawable.button_selector);
     }
 
     @Override
     public void onClearDrawing() {
-        setBrushActive();
+        setPencilActive();
     }
 }

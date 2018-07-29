@@ -8,7 +8,7 @@
     <string name="select_brush">Select brush</string>
     <string name="select_eraser">Select eraser</string>
     <string name="select_pattern">Select pattern</string>
-    <string name="set_brush_width">Select</string>
+    <string name="set_brush_width">OK</string>
     <string name="save_drawing">Save drawing</string>
     <string name="save_drawing_message">Save drawing to the Gallery?</string>
     <string name="clear_drawing_message">Clear the drawing?</string>

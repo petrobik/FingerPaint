@@ -34,7 +34,7 @@
             android:layout_marginLeft="2dp"/>
 
         <ImageButton
-            android:id="@+id/button_brush"
+            android:id="@+id/button_pencil"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/ic_paint_brush_2"

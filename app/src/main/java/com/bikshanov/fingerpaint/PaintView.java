@@ -10,19 +10,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,7 +25,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.UUID;
 
 /**
  * Created by Peter on 14.03.2018.
@@ -39,6 +33,10 @@ import java.util.UUID;
 public class PaintView extends View {
 
     private static final float TOUCH_TOLERANCE = 10;
+
+    private static final int BRUSH_OPACITY = 127;
+    private static final int PENCIL_OPACITY = 255;
+    private static final int ERASER_OPACITY = 255;
 
     private Bitmap bitmap;
     private Bitmap canvasBitmap;
@@ -67,13 +65,17 @@ public class PaintView extends View {
     private Bitmap patternBitmap;
     private BitmapShader patternShader;
 
-    private int strokeWidth = 15;
+    private int pencilWidth = 15;
+    private int brushWidth = 15;
     private int eraserWidth;
     private int paintColor = 0xFF000000;
     private int backgroundColor = 0xFFFFFFFF;
     private int eraseColor = 0xFFFFFFFF;
 
-    private int drawMode = DrawModes.DRAW;
+    private int paintOpacity = 255;
+
+
+    private int drawMode = DrawModes.PENCIL;
 
     boolean erase = false;
     boolean isPattern = false;
@@ -94,7 +96,8 @@ public class PaintView extends View {
 
 //        paintScreen = new Paint();
         eraserWidth = getResources().getDimensionPixelSize((R.dimen.brush_small));
-        strokeWidth = getResources().getDimensionPixelSize(R.dimen.brush_small);
+        pencilWidth = getResources().getDimensionPixelSize(R.dimen.brush_small);
+        brushWidth = getResources().getDimensionPixelSize(R.dimen.brush_medium);
         drawPath = new Path();
         drawPaint = new Paint();
         backgroundPaint = new Paint();
@@ -111,23 +114,31 @@ public class PaintView extends View {
             drawPaint.setAntiAlias(true);
 
             switch (drawMode) {
-                case DrawModes.DRAW:
+                case DrawModes.PENCIL:
                     drawPaint.setColor(paintColor);
-                    drawPaint.setStrokeWidth(strokeWidth);
+                    drawPaint.setStrokeWidth(pencilWidth);
+                    drawPaint.setAlpha(PENCIL_OPACITY);
+                    break;
+                case DrawModes.BRUSH:
+                    drawPaint.setColor(paintColor);
+                    drawPaint.setStrokeWidth(brushWidth);
+                    drawPaint.setAlpha(BRUSH_OPACITY);
                     break;
                 case DrawModes.ERASE:
                     drawPaint.setColor(eraseColor);
                     drawPaint.setStrokeWidth(eraserWidth);
+                    drawPaint.setAlpha(ERASER_OPACITY);
                     break;
                 case DrawModes.PATTERN:
 //                    drawPaint.setColor(paintColor);
-//                    drawPaint.setStrokeWidth(strokeWidth);
+//                    drawPaint.setStrokeWidth(pencilWidth);
+                    drawPaint.setAlpha(PENCIL_OPACITY);
                     break;
             }
 
 //            if (!erase) {
 //                drawPaint.setColor(paintColor);
-//                drawPaint.setStrokeWidth(strokeWidth);
+//                drawPaint.setStrokeWidth(pencilWidth);
 //            }
 //            else {
 //                drawPaint.setColor(eraseColor);
@@ -156,6 +167,9 @@ public class PaintView extends View {
             drawPaint.setColor(strokeMap.get(p).getColor());
             drawPaint.setStrokeWidth(strokeMap.get(p).getBrushSize());
             drawPaint.setShader(strokeMap.get(p).getPattern());
+
+            drawPaint.setAlpha(strokeMap.get(p).getOpacity());
+
             canvas.drawPath(p, drawPaint);
         }
     }
@@ -171,25 +185,34 @@ public class PaintView extends View {
 //        canvas.drawPath(drawPath, drawPaint);
 
         switch (drawMode) {
-            case DrawModes.DRAW:
+            case DrawModes.PENCIL:
                 drawPaint.setColor(paintColor);
-                drawPaint.setStrokeWidth(strokeWidth);
+                drawPaint.setStrokeWidth(pencilWidth);
                 patternShader = null;
+                drawPaint.setAlpha(PENCIL_OPACITY);
+                break;
+            case DrawModes.BRUSH:
+                drawPaint.setColor(paintColor);
+                drawPaint.setStrokeWidth(brushWidth);
+                patternShader = null;
+                drawPaint.setAlpha(BRUSH_OPACITY);
                 break;
             case DrawModes.ERASE:
                 drawPaint.setColor(eraseColor);
                 drawPaint.setStrokeWidth(eraserWidth);
                 patternShader = null;
+                drawPaint.setAlpha(ERASER_OPACITY);
                 break;
             case DrawModes.PATTERN:
 //                drawPaint.setColor(paintColor);
-                drawPaint.setStrokeWidth(strokeWidth);
+                drawPaint.setStrokeWidth(pencilWidth);
+                drawPaint.setAlpha(PENCIL_OPACITY);
                 break;
         }
 
 //        if (!erase) {
 //            drawPaint.setColor(paintColor);
-//            drawPaint.setStrokeWidth(strokeWidth);
+//            drawPaint.setStrokeWidth(pencilWidth);
 //        }
 //        else {
 //            drawPaint.setColor(eraseColor);
@@ -310,6 +333,8 @@ public class PaintView extends View {
             drawPaint.setStrokeWidth(strokeMap.get(paths.get(0)).getBrushSize());
             drawPaint.setShader(strokeMap.get(paths.get(0)).getPattern());
 
+            drawPaint.setAlpha(strokeMap.get(paths.get(0)).getOpacity());
+
             drawCanvas.drawPath(paths.get(0), drawPaint);
 
             ArrayList<Path> tmpPaths = new ArrayList<Path>(paths.subList(1, MAX_UNDO));
@@ -328,19 +353,30 @@ public class PaintView extends View {
         currentStroke.setPattern(patternShader);
 
         switch (drawMode) {
-            case DrawModes.DRAW:
+            case DrawModes.PENCIL:
                 currentStroke.setColor(paintColor);
-                currentStroke.setBrushSize(strokeWidth);
+                currentStroke.setBrushSize(pencilWidth);
+
+                currentStroke.setOpacity(PENCIL_OPACITY);
+//                strokeMap.put(drawPath, currentStroke);
+                break;
+            case DrawModes.BRUSH:
+                currentStroke.setColor(paintColor);
+                currentStroke.setBrushSize(brushWidth);
+
+                currentStroke.setOpacity(BRUSH_OPACITY);
 //                strokeMap.put(drawPath, currentStroke);
                 break;
             case DrawModes.ERASE:
                 currentStroke.setColor(eraseColor);
                 currentStroke.setBrushSize(eraserWidth);
 //                strokeMap.put(drawPath, currentStroke);
+                currentStroke.setOpacity(ERASER_OPACITY);
                 break;
             case DrawModes.PATTERN:
                 currentStroke.setColor(paintColor);
-                currentStroke.setBrushSize(strokeWidth);
+                currentStroke.setBrushSize(pencilWidth);
+                currentStroke.setOpacity(PENCIL_OPACITY);
 //                strokeMap.put(drawPath, currentStroke);
 //                drawPaint.setShader(patternShader);
                 break;
@@ -350,7 +386,7 @@ public class PaintView extends View {
 
 //        if (!erase) {
 //            currentStroke.setColor(paintColor);
-//            currentStroke.setBrushSize(strokeWidth);
+//            currentStroke.setBrushSize(pencilWidth);
 //            strokeMap.put(drawPath, currentStroke);
 ////            colorsMap.put(drawPath, paintColor);
 //        }
@@ -361,7 +397,7 @@ public class PaintView extends View {
 ////            colorsMap.put(drawPath, eraseColor);
 //        }
 
-//        widthMap.put(drawPath, strokeWidth);
+//        widthMap.put(drawPath, pencilWidth);
 //        patternMap.put(drawPath, patternShader);
 
 
@@ -384,7 +420,7 @@ public class PaintView extends View {
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
         canvasBitmap.eraseColor(Color.WHITE);
 //        setErase(false);
-        setDrawMode(DrawModes.DRAW);
+        setDrawMode(DrawModes.PENCIL);
 //        setEmptyPattern();
         invalidate();
     }
@@ -397,16 +433,27 @@ public class PaintView extends View {
 
     public int getDrawingColor() {
 
-//        return drawPaint.getColor();
+        switch (drawMode) {
+            case DrawModes.PENCIL:
+                return paintColor;
+            case DrawModes.BRUSH:
+                return paintColor;
+            case DrawModes.ERASE:
+                return eraseColor;
+        }
         return paintColor;
     }
 
     public void setLineWidth(int width) {
 
         switch (drawMode) {
-            case DrawModes.DRAW:
-                strokeWidth = width;
-                drawPaint.setStrokeWidth(strokeWidth);
+            case DrawModes.PENCIL:
+                pencilWidth = width;
+                drawPaint.setStrokeWidth(pencilWidth);
+                break;
+            case DrawModes.BRUSH:
+                brushWidth = width;
+                drawPaint.setStrokeWidth(brushWidth);
                 break;
             case DrawModes.ERASE:
                 eraserWidth = width;
@@ -415,8 +462,8 @@ public class PaintView extends View {
         }
 
 //        if (!erase) {
-//            strokeWidth = width;
-//            drawPaint.setStrokeWidth(strokeWidth);
+//            pencilWidth = width;
+//            drawPaint.setStrokeWidth(pencilWidth);
 //        }
 //        else {
 //            eraserWidth = width;
@@ -437,12 +484,34 @@ public class PaintView extends View {
         float pixelAmount = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, brushSize,
                 getResources().getDisplayMetrics());
 //        drawPaint.setStrokeWidth(pixelAmount);
-        strokeWidth = (int) pixelAmount;
+        pencilWidth = (int) pixelAmount;
+    }
+
+    public int getPaintOpacity() {
+
+        switch (drawMode) {
+            case DrawModes.PENCIL:
+                return PENCIL_OPACITY;
+            case DrawModes.BRUSH:
+                return BRUSH_OPACITY;
+            case DrawModes.ERASE:
+                return ERASER_OPACITY;
+        }
+        return PENCIL_OPACITY;
     }
 
     public int getLineWidth() {
 
-        return (int) drawPaint.getStrokeWidth();
+        switch (drawMode) {
+            case DrawModes.PENCIL:
+                return pencilWidth;
+            case DrawModes.BRUSH:
+                return brushWidth;
+            case DrawModes.ERASE:
+                return eraserWidth;
+        }
+
+        return pencilWidth;
     }
 
 //    public void setErase(boolean isErase) {
@@ -456,7 +525,7 @@ public class PaintView extends View {
 //        }
 //        else {
 //            drawPaint.setColor(paintColor);
-//            drawPaint.setStrokeWidth(strokeWidth);
+//            drawPaint.setStrokeWidth(pencilWidth);
 //        }
 //
 //    }
@@ -563,14 +632,14 @@ public class PaintView extends View {
             dir.mkdirs();
         }
 
-        String fileName = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()).concat(".png");
+        String fileName = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()).concat(".jpg");
         File file = new File(dir, fileName);
 
         FileOutputStream fout;
 
         try {
             fout = new FileOutputStream(file);
-            getDrawingCache().compress(Bitmap.CompressFormat.PNG, 85, fout);
+            getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 85, fout);
             fout.flush();
             fout.close();
             setDrawingCacheEnabled(false);

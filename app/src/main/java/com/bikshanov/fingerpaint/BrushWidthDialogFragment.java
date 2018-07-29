@@ -5,10 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -19,10 +17,9 @@ import android.widget.ImageButton;
  * Created by Peter on 14.03.2018.
  */
 
-public class EraserDialogFragment extends DialogFragment implements View.OnClickListener {
+public class BrushWidthDialogFragment extends DialogFragment implements View.OnClickListener {
 
-    private ImageButton smallestEraserButton, smallEraserButton, mediumEraserButton, largeEraserButton, largestEraserButton;
-
+    private ImageButton smallestBrushButton, smallBrushButton, largeBrushButton, largestBrushButton;
     private Path brushPath;
     private Paint smallestPaint, smallPaint, largePaint, largestPaint;
     private Bitmap smallestBitmap, smallBitmap, largeBitmap, largestBitmap;
@@ -31,23 +28,29 @@ public class EraserDialogFragment extends DialogFragment implements View.OnClick
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomDialogTheme);
-        View brushDialogView = getActivity().getLayoutInflater().inflate(R.layout.fragment_eraser, null);
+        View brushDialogView = getActivity().getLayoutInflater().inflate(R.layout.fragment_brush, null);
         builder.setView(brushDialogView);
-        builder.setTitle(R.string.select_eraser);
+        builder.setTitle(R.string.select_brush);
 
-        smallestEraserButton = (ImageButton) brushDialogView.findViewById(R.id.smallestEraserButton);
-        smallEraserButton = (ImageButton) brushDialogView.findViewById(R.id.smallEraserButton);
-//        mediumEraserButton = (ImageButton) brushDialogView.findViewById(R.id.mediumEraserButton);
-        largeEraserButton = (ImageButton) brushDialogView.findViewById(R.id.largeEraserButton);
-        largestEraserButton = (ImageButton) brushDialogView.findViewById(R.id.largestEraserButton);
+        smallestBrushButton = (ImageButton) brushDialogView.findViewById(R.id.smallestEraserButton);
+        smallBrushButton = (ImageButton) brushDialogView.findViewById(R.id.smallEraserButton);
+//        mediumBrushButton = (ImageButton) brushDialogView.findViewById(R.id.mediumEraserButton);
+        largeBrushButton = (ImageButton) brushDialogView.findViewById(R.id.largeEraserButton);
+        largestBrushButton = (ImageButton) brushDialogView.findViewById(R.id.largestEraserButton);
 
-        smallestEraserButton.setOnClickListener(this);
-        smallEraserButton.setOnClickListener(this);
-//        mediumEraserButton.setOnClickListener(this);
-        largeEraserButton.setOnClickListener(this);
-        largestEraserButton.setOnClickListener(this);
+        smallestBrushButton.setOnClickListener(this);
+        smallBrushButton.setOnClickListener(this);
+//        mediumBrushButton.setOnClickListener(this);
+        largeBrushButton.setOnClickListener(this);
+        largestBrushButton.setOnClickListener(this);
 
         final PaintView paintView = getPaintFragment().getPaintView();
+
+//        smallestBrushButton.getDrawable().setColorFilter(paintView.getDrawingColor(), PorterDuff.Mode.SRC_IN);
+//        smallBrushButton.getDrawable().setColorFilter(paintView.getDrawingColor(), PorterDuff.Mode.SRC_IN);
+////        mediumBrushButton.getDrawable().setColorFilter(paintView.getDrawingColor(), PorterDuff.Mode.SRC_IN);
+//        largeBrushButton.getDrawable().setColorFilter(paintView.getDrawingColor(), PorterDuff.Mode.SRC_IN);
+//        largestBrushButton.getDrawable().setColorFilter(paintView.getDrawingColor(), PorterDuff.Mode.SRC_IN);
 
         smallestBitmap = Bitmap.createBitmap(400, 120, Bitmap.Config.ARGB_8888);
         smallBitmap = Bitmap.createBitmap(400, 120, Bitmap.Config.ARGB_8888);
@@ -63,28 +66,28 @@ public class EraserDialogFragment extends DialogFragment implements View.OnClick
         largePaint = new Paint();
         largestPaint = new Paint();
 
-        smallestPaint.setColor(Color.WHITE);
+        smallestPaint.setColor(paintView.getDrawingColor());
         smallestPaint.setAntiAlias(true);
         smallestPaint.setStrokeCap(Paint.Cap.ROUND);
         smallestPaint.setStrokeJoin(Paint.Join.ROUND);
         smallestPaint.setStyle(Paint.Style.STROKE);
         smallestPaint.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.brush_smallest));
 
-        smallPaint.setColor(Color.WHITE);
+        smallPaint.setColor(paintView.getDrawingColor());
         smallPaint.setAntiAlias(true);
         smallPaint.setStrokeCap(Paint.Cap.ROUND);
         smallPaint.setStrokeJoin(Paint.Join.ROUND);
         smallPaint.setStyle(Paint.Style.STROKE);
         smallPaint.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.brush_small));
 
-        largePaint.setColor(Color.WHITE);
+        largePaint.setColor(paintView.getDrawingColor());
         largePaint.setAntiAlias(true);
         largePaint.setStrokeCap(Paint.Cap.ROUND);
         largePaint.setStrokeJoin(Paint.Join.ROUND);
         largePaint.setStyle(Paint.Style.STROKE);
         largePaint.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.brush_large));
 
-        largestPaint.setColor(Color.WHITE);
+        largestPaint.setColor(paintView.getDrawingColor());
         largestPaint.setAntiAlias(true);
         largestPaint.setStrokeCap(Paint.Cap.ROUND);
         largestPaint.setStrokeJoin(Paint.Join.ROUND);
@@ -97,16 +100,17 @@ public class EraserDialogFragment extends DialogFragment implements View.OnClick
         largestCanvas = new Canvas(largestBitmap);
 
         smallestCanvas.drawPath(brushPath, smallestPaint);
-        smallestEraserButton.setImageBitmap(smallestBitmap);
+        smallestBrushButton.setImageBitmap(smallestBitmap);
 
         smallCanvas.drawPath(brushPath, smallPaint);
-        smallEraserButton.setImageBitmap(smallBitmap);
+        smallBrushButton.setImageBitmap(smallBitmap);
 
         largeCanvas.drawPath(brushPath, largePaint);
-        largeEraserButton.setImageBitmap(largeBitmap);
+        largeBrushButton.setImageBitmap(largeBitmap);
 
         largestCanvas.drawPath(brushPath, largestPaint);
-        largestEraserButton.setImageBitmap(largestBitmap);
+        largestBrushButton.setImageBitmap(largestBitmap);
+
 
 //        final SeekBar brushWidthSeekBar = (SeekBar) brushDialogView.findViewById(R.id.brushWidthSeekBar);
 //        brushWidthSeekBar.setOnSeekBarChangeListener(brushWidthChanged);
@@ -159,6 +163,7 @@ public class EraserDialogFragment extends DialogFragment implements View.OnClick
             brushSize = getResources().getDimensionPixelSize(R.dimen.brush_smallest);
             getPaintFragment().getPaintView().setLineWidth(brushSize);
             dismiss();
+            recycleBitmaps();
         }
 
         else if (view.getId() == R.id.smallEraserButton) {
@@ -166,6 +171,7 @@ public class EraserDialogFragment extends DialogFragment implements View.OnClick
             brushSize = getResources().getDimensionPixelSize(R.dimen.brush_small);
             getPaintFragment().getPaintView().setLineWidth(brushSize);
             dismiss();
+            recycleBitmaps();
         }
 //        else if (view.getId() == R.id.mediumEraserButton) {
 //
@@ -179,12 +185,31 @@ public class EraserDialogFragment extends DialogFragment implements View.OnClick
             brushSize = getResources().getDimensionPixelSize(R.dimen.brush_large);
             getPaintFragment().getPaintView().setLineWidth(brushSize);
             dismiss();
+            recycleBitmaps();
         }
         else if (view.getId() == R.id.largestEraserButton) {
 
             brushSize = getResources().getDimensionPixelSize(R.dimen.brush_largest);
             getPaintFragment().getPaintView().setLineWidth(brushSize);
             dismiss();
+            recycleBitmaps();
         }
+    }
+
+    private void recycleBitmaps() {
+        if (!smallestBitmap.isRecycled()) {
+            smallestBitmap.recycle();
+        }
+        if (!smallBitmap.isRecycled()) {
+            smallBitmap.recycle();
+        }
+        if (!largeBitmap.isRecycled()) {
+            largeBitmap.recycle();
+        }
+        if (!largestBitmap.isRecycled()) {
+            largestBitmap.recycle();
+        }
+
+        brushPath.reset();
     }
 }
