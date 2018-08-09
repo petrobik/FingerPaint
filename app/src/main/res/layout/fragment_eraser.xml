@@ -7,7 +7,7 @@
     android:padding="8dp">
 
     <ImageButton
-        android:id="@+id/smallestEraserButton"
+        android:id="@+id/brushWidthButton"
         android:layout_height="65dp"
         android:layout_width="200dp"
         android:layout_gravity="center_horizontal"

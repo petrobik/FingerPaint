@@ -68,6 +68,7 @@ public class PaintView extends View {
     private int pencilWidth = 15;
     private int brushWidth = 15;
     private int eraserWidth;
+    private int patternWidth;
     private int paintColor = 0xFF000000;
     private int backgroundColor = 0xFFFFFFFF;
     private int eraseColor = 0xFFFFFFFF;
@@ -95,9 +96,10 @@ public class PaintView extends View {
     private void init() {
 
 //        paintScreen = new Paint();
-        eraserWidth = getResources().getDimensionPixelSize((R.dimen.brush_small));
+        eraserWidth = getResources().getDimensionPixelSize((R.dimen.brush_medium));
         pencilWidth = getResources().getDimensionPixelSize(R.dimen.brush_small);
         brushWidth = getResources().getDimensionPixelSize(R.dimen.brush_medium);
+        patternWidth = getResources().getDimensionPixelSize(R.dimen.brush_medium);
         drawPath = new Path();
         drawPaint = new Paint();
         backgroundPaint = new Paint();
@@ -131,7 +133,7 @@ public class PaintView extends View {
                     break;
                 case DrawModes.PATTERN:
 //                    drawPaint.setColor(paintColor);
-//                    drawPaint.setStrokeWidth(pencilWidth);
+                    drawPaint.setStrokeWidth(patternWidth);
                     drawPaint.setAlpha(PENCIL_OPACITY);
                     break;
             }
@@ -205,7 +207,7 @@ public class PaintView extends View {
                 break;
             case DrawModes.PATTERN:
 //                drawPaint.setColor(paintColor);
-                drawPaint.setStrokeWidth(pencilWidth);
+                drawPaint.setStrokeWidth(patternWidth);
                 drawPaint.setAlpha(PENCIL_OPACITY);
                 break;
         }
@@ -325,10 +327,6 @@ public class PaintView extends View {
 
         else {
 
-//            drawPaint.setColor(colorsMap.get(paths.get(0)));
-//            drawPaint.setStrokeWidth(widthMap.get(paths.get(0)));
-//            drawPaint.setShader(patternMap.get(paths.get(0)));
-
             drawPaint.setColor(strokeMap.get(paths.get(0)).getColor());
             drawPaint.setStrokeWidth(strokeMap.get(paths.get(0)).getBrushSize());
             drawPaint.setShader(strokeMap.get(paths.get(0)).getPattern());
@@ -375,7 +373,7 @@ public class PaintView extends View {
                 break;
             case DrawModes.PATTERN:
                 currentStroke.setColor(paintColor);
-                currentStroke.setBrushSize(pencilWidth);
+                currentStroke.setBrushSize(patternWidth);
                 currentStroke.setOpacity(PENCIL_OPACITY);
 //                strokeMap.put(drawPath, currentStroke);
 //                drawPaint.setShader(patternShader);
@@ -511,7 +509,7 @@ public class PaintView extends View {
                 return eraserWidth;
         }
 
-        return pencilWidth;
+        return patternWidth;
     }
 
 //    public void setErase(boolean isErase) {
@@ -596,66 +594,68 @@ public class PaintView extends View {
         return canvasBitmap;
     }
 
-    private void addToGallery(String path) {
-        File file = new File(path);
-        Uri contentUri = Uri.fromFile(file);
-//        Uri contentUri = Uri.parse("file://" + path);
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, contentUri);
-//        mediaScanIntent.setData(contentUri);
-        getContext().sendBroadcast(mediaScanIntent);
-    }
+//    private void addToGallery(String path) {
+//        File file = new File(path);
+//        Uri contentUri = Uri.fromFile(file);
+////        Uri contentUri = Uri.parse("file://" + path);
+//        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, contentUri);
+////        mediaScanIntent.setData(contentUri);
+//        getContext().sendBroadcast(mediaScanIntent);
+//    }
 
     public void saveDrawing() {
+
+        Utils.savePicture(this, getContext());
 //        final String fileName = System.currentTimeMillis() + ".png";
 ////
-        setDrawingCacheEnabled(true);
-//        setDrawingCacheQuality(DRAWING_CACHE_QUALITY_HIGH);
-////
-//        String location = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), getDrawingCache(), fileName,  "Drawing");
-////
-//        if (location != null) {
-//            addToGallery(location);
-//            Toast message = Toast.makeText(getContext(), "Drawing saved", Toast.LENGTH_SHORT);
-//            message.show();
+//        setDrawingCacheEnabled(true);
+////        setDrawingCacheQuality(DRAWING_CACHE_QUALITY_HIGH);
+//////
+////        String location = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), getDrawingCache(), fileName,  "Drawing");
+//////
+////        if (location != null) {
+////            addToGallery(location);
+////            Toast message = Toast.makeText(getContext(), "Drawing saved", Toast.LENGTH_SHORT);
+////            message.show();
+////        }
+////        else {
+////            Toast message = Toast.makeText(getContext(), "Drawing not saved", Toast.LENGTH_SHORT);
+////            message.show();
+////        }
+//
+//
+//
+//        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/FingerPaint";
+//        File dir = new File(filePath);
+//
+//        if (!dir.exists()) {
+//            dir.mkdirs();
 //        }
-//        else {
-//            Toast message = Toast.makeText(getContext(), "Drawing not saved", Toast.LENGTH_SHORT);
-//            message.show();
+//
+//        String fileName = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()).concat(".jpg");
+//        File file = new File(dir, fileName);
+//
+//        FileOutputStream fout;
+//
+//        try {
+//            fout = new FileOutputStream(file);
+//            getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 85, fout);
+//            fout.flush();
+//            fout.close();
+//            setDrawingCacheEnabled(false);
+//            addToGallery(file.getAbsolutePath());
+//
+////            MediaScannerConnection.scanFile(getContext(), new String[]{file.toString()}, null,
+////                    new MediaScannerConnection.OnScanCompletedListener() {
+////                        @Override
+////                        public void onScanCompleted(String s, Uri uri) {
+////                            Log.i("SDCard", "Scanned: " + s + ":");
+////                            Log.i("SDCard", "-> uri=" + uri);
+////                        }
+////                    });
 //        }
-
-
-
-        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/FingerPaint";
-        File dir = new File(filePath);
-
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        String fileName = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()).concat(".jpg");
-        File file = new File(dir, fileName);
-
-        FileOutputStream fout;
-
-        try {
-            fout = new FileOutputStream(file);
-            getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 85, fout);
-            fout.flush();
-            fout.close();
-            setDrawingCacheEnabled(false);
-            addToGallery(file.getAbsolutePath());
-
-//            MediaScannerConnection.scanFile(getContext(), new String[]{file.toString()}, null,
-//                    new MediaScannerConnection.OnScanCompletedListener() {
-//                        @Override
-//                        public void onScanCompleted(String s, Uri uri) {
-//                            Log.i("SDCard", "Scanned: " + s + ":");
-//                            Log.i("SDCard", "-> uri=" + uri);
-//                        }
-//                    });
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 }

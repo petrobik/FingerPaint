@@ -32,7 +32,7 @@ public class BrushWidthDialogFragment extends DialogFragment implements View.OnC
         builder.setView(brushDialogView);
         builder.setTitle(R.string.select_brush);
 
-        smallestBrushButton = (ImageButton) brushDialogView.findViewById(R.id.smallestEraserButton);
+        smallestBrushButton = (ImageButton) brushDialogView.findViewById(R.id.brushWidthButton);
         smallBrushButton = (ImageButton) brushDialogView.findViewById(R.id.smallEraserButton);
 //        mediumBrushButton = (ImageButton) brushDialogView.findViewById(R.id.mediumEraserButton);
         largeBrushButton = (ImageButton) brushDialogView.findViewById(R.id.largeEraserButton);
@@ -71,7 +71,7 @@ public class BrushWidthDialogFragment extends DialogFragment implements View.OnC
         smallestPaint.setStrokeCap(Paint.Cap.ROUND);
         smallestPaint.setStrokeJoin(Paint.Join.ROUND);
         smallestPaint.setStyle(Paint.Style.STROKE);
-        smallestPaint.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.brush_smallest));
+        smallestPaint.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.brush_min));
 
         smallPaint.setColor(paintView.getDrawingColor());
         smallPaint.setAntiAlias(true);
@@ -92,7 +92,7 @@ public class BrushWidthDialogFragment extends DialogFragment implements View.OnC
         largestPaint.setStrokeCap(Paint.Cap.ROUND);
         largestPaint.setStrokeJoin(Paint.Join.ROUND);
         largestPaint.setStyle(Paint.Style.STROKE);
-        largestPaint.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.brush_largest));
+        largestPaint.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.brush_max));
 
         smallestCanvas = new Canvas(smallestBitmap);
         smallCanvas = new Canvas(smallBitmap);
@@ -158,9 +158,9 @@ public class BrushWidthDialogFragment extends DialogFragment implements View.OnC
 
         int brushSize;
 
-        if (view.getId() == R.id.smallestEraserButton) {
+        if (view.getId() == R.id.brushWidthButton) {
 
-            brushSize = getResources().getDimensionPixelSize(R.dimen.brush_smallest);
+            brushSize = getResources().getDimensionPixelSize(R.dimen.brush_min);
             getPaintFragment().getPaintView().setLineWidth(brushSize);
             dismiss();
             recycleBitmaps();
@@ -189,7 +189,7 @@ public class BrushWidthDialogFragment extends DialogFragment implements View.OnC
         }
         else if (view.getId() == R.id.largestEraserButton) {
 
-            brushSize = getResources().getDimensionPixelSize(R.dimen.brush_largest);
+            brushSize = getResources().getDimensionPixelSize(R.dimen.brush_max);
             getPaintFragment().getPaintView().setLineWidth(brushSize);
             dismiss();
             recycleBitmaps();

@@ -9,7 +9,7 @@
     <ImageButton
         android:layout_width="200dp"
         android:layout_height="65dp"
-        android:id="@+id/smallestEraserButton"
+        android:id="@+id/brushWidthButton"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/smallest"
         android:background="@drawable/transparent_dark"

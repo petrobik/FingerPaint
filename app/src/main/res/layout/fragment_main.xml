@@ -128,7 +128,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@drawable/wooden">
+        android:background="@drawable/wooden"
+        android:layout_gravity="center_vertical">
 
         <HorizontalScrollView
             android:layout_width="wrap_content"

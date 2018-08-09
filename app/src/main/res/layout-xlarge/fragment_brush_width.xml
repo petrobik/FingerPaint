@@ -7,8 +7,8 @@
     android:padding="8dp">
 
     <ImageButton
-        android:layout_width="@dimen/brush_preview_width"
-        android:layout_height="@dimen/brush_preview_height"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
         android:id="@+id/brushWidthButton"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/transparent_dark"
@@ -20,4 +20,3 @@
         android:layout_height="match_parent" />
 
 </LinearLayout>
-
