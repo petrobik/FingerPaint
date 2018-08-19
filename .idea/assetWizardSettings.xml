@@ -34,7 +34,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="50" />
+                                                <entry key="scalingPercent" value="60" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -45,8 +45,9 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundLayerName" value="background" />
-                                      <entry key="foregroundImage" value="D:\android\icons\brushes.png" />
+                                      <entry key="foregroundImage" value="D:\android\inkscape\g6323.png" />
                                       <entry key="foregroundLayerName" value="brushes" />
+                                      <entry key="generateRoundIcon" value="false" />
                                       <entry key="legacyIconShape" value="NONE" />
                                       <entry key="showGrid" value="true" />
                                       <entry key="webIconShape" value="NONE" />

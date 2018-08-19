@@ -100,13 +100,13 @@ public class BrushDialogFragment extends DialogFragment implements View.OnClickL
 
         brushWidthSeekBar.setProgress(paintView.getLineWidth() - min);
 
-        builder.setPositiveButton(R.string.set_brush_width,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        paintView.setLineWidth(brushWidthSeekBar.getProgress() + min);
-                    }
-                });
+//        builder.setPositiveButton(R.string.set_brush_width,
+//                new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        paintView.setLineWidth(brushWidthSeekBar.getProgress() + min);
+//                    }
+//                });
 
         return builder.create();
     }

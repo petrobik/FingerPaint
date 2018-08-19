@@ -2,6 +2,7 @@
 <resources>
     <dimen name="brush_min">5dp</dimen>
     <dimen name="brush_small">10dp</dimen>
+    <dimen name="brush_pattern">30dp</dimen>
     <dimen name="brush_medium">20dp</dimen>
     <dimen name="brush_large">20dp</dimen>
     <dimen name="brush_max">35dp</dimen>

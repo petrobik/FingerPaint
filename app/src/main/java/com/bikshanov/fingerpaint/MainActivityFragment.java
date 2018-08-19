@@ -30,7 +30,7 @@ import java.util.UUID;
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment implements SpectrumPalette.OnColorSelectedListener,
-        View.OnClickListener, ClearDialogFragment.ClearDialogFragmentListener {
+        View.OnClickListener {
 
     private PaintView paintView;
     private float acceleration;
@@ -45,6 +45,9 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
     private static final int ACCELERATION_THRESHOLD = 100000;
 
     private static final int SAVE_IMAGE_PERMISSION_REQUEST_CODE = 1;
+
+    private int previousMode = DrawModes.PENCIL;
+    private int currentMode = DrawModes.PENCIL;
 
 
     public MainActivityFragment() {
@@ -162,10 +165,16 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
     public void onColorSelected(int color) {
         paintView.setDrawingColor(color);
 
-        if (paintView.getDrawMode() == DrawModes.PATTERN ||
-                paintView.getDrawMode() == DrawModes.ERASE) {
-            paintView.setDrawMode(DrawModes.PENCIL);
-            setPencilActive();
+        currentMode = paintView.getDrawMode();
+
+        if (currentMode == DrawModes.PATTERN ||
+                currentMode == DrawModes.ERASE) {
+            paintView.setDrawMode(previousMode);
+
+            if (previousMode == DrawModes.PENCIL)
+                setPencilActive();
+            else
+                setBrushActive();
         }
 
 //        paintView.setErase(false);
@@ -188,9 +197,13 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
     public void onClick(View view) {
 
         if (view.getId() == R.id.button_new) {
+
             confirmClear();
         }
         else if (view.getId() == R.id.button_pencil) {
+
+            currentMode = paintView.getDrawMode();
+            previousMode = currentMode;
 
             setPencilActive();
 
@@ -204,40 +217,57 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
 //            paintView.setEmptyPattern();
 
-            paintView.setDrawMode(DrawModes.PENCIL);
+            if (paintView.getDrawMode() == DrawModes.PENCIL) {
 
-            BrushDialogFragment brushDialog = new BrushDialogFragment();
+                BrushDialogFragment brushDialog = new BrushDialogFragment();
 //            brushDialog.setCancelable(false);
-            brushDialog.show(getFragmentManager(), "brush dialog");
+                brushDialog.show(getFragmentManager(), "brush dialog");
+            }
 
+            paintView.setDrawMode(DrawModes.PENCIL);
         }
 
         else if (view.getId() == R.id.button_brush) {
 
+            currentMode = paintView.getDrawMode();
+            previousMode = currentMode;
+
             setBrushActive();
-            paintView.setDrawMode(DrawModes.BRUSH);
 
-            BrushDialogFragment brushDialog = new BrushDialogFragment();
+            if (paintView.getDrawMode() == DrawModes.BRUSH) {
+
+                BrushDialogFragment brushDialog = new BrushDialogFragment();
 //            brushDialog.setCancelable(false);
-            brushDialog.show(getFragmentManager(), "brush dialog");
+                brushDialog.show(getFragmentManager(), "brush dialog");
+            }
 
+            paintView.setDrawMode(DrawModes.BRUSH);
 //            BrushWidthDialogFragment widthFragment = new BrushWidthDialogFragment();
 //            widthFragment.show(getFragmentManager(), "width dialog");
         }
 
         else if (view.getId() == R.id.button_eraser) {
 
+            currentMode = paintView.getDrawMode();
+
+            if (currentMode == DrawModes.PENCIL ||
+                    currentMode == DrawModes.BRUSH) {
+                previousMode = currentMode;
+            }
+
 //            paintView.setErase(true);
 //            paintView.setEmptyPattern();
 
-            paintView.setDrawMode(DrawModes.ERASE);
-
             setEraserActive();
 
-            BrushDialogFragment brushDialog = new BrushDialogFragment();
-//            brushDialog.setCancelable(false);
-            brushDialog.show(getFragmentManager(), "brush dialog");
+            if (paintView.getDrawMode() == DrawModes.ERASE) {
 
+                BrushDialogFragment brushDialog = new BrushDialogFragment();
+//            brushDialog.setCancelable(false);
+                brushDialog.show(getFragmentManager(), "brush dialog");
+            }
+
+            paintView.setDrawMode(DrawModes.ERASE);
 //            EraserDialogFragment eraserDialog = new EraserDialogFragment();
 ////            eraserDialog.setCancelable(false);
 //            eraserDialog.show(getFragmentManager(), "brush dialog");
@@ -249,6 +279,13 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         }
 
         else if (view.getId() == R.id.button_pattern) {
+
+            currentMode = paintView.getDrawMode();
+
+            if (currentMode == DrawModes.PENCIL ||
+                    currentMode == DrawModes.BRUSH) {
+                previousMode = currentMode;
+            }
 
 //            paintView.setPatternMode(true);
 
@@ -264,15 +301,15 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         else if (view.getId() == R.id.button_save) {
 
             AlertDialog.Builder saveDialog = new AlertDialog.Builder(getContext());
-            saveDialog.setTitle(R.string.save_drawing);
+//            saveDialog.setTitle(R.string.save_drawing);
             saveDialog.setMessage(R.string.save_drawing_message);
-            saveDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            saveDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     checkPermission();
                 }
             });
-            saveDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            saveDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.cancel();
@@ -363,9 +400,27 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
     }
 
     private void confirmClear() {
-        ClearDialogFragment clearDialogFragment = new ClearDialogFragment();
-        clearDialogFragment.setTargetFragment(MainActivityFragment.this, 300);
-        clearDialogFragment.show(getFragmentManager(), "clear dialog");
+//        ClearDialogFragment clearDialogFragment = new ClearDialogFragment();
+//        clearDialogFragment.setTargetFragment(MainActivityFragment.this, 300);
+//        clearDialogFragment.show(getFragmentManager(), "clear dialog");
+
+        AlertDialog.Builder clearDialog = new AlertDialog.Builder(getContext());
+//            saveDialog.setTitle(R.string.save_drawing);
+        clearDialog.setMessage(R.string.clear_drawing_message);
+        clearDialog.setPositiveButton(R.string.button_clear, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                getPaintView().clear();
+            }
+        });
+        clearDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        clearDialog.show();
+
     }
 
     public void setPencilActive() {
@@ -396,8 +451,10 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         brushButton.setBackgroundResource(R.drawable.button_selector);
     }
 
-    @Override
-    public void onClearDrawing() {
-        setPencilActive();
+    public void setUndo() {
+        if (undoButton.isEnabled()) {
+            undoButton.setEnabled(false);
+        }
+        else undoButton.setEnabled(true);
     }
 }

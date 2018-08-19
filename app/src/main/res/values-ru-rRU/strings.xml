@@ -14,5 +14,7 @@
     <string name="clear_drawing_message">Удалить рисунок?</string>
     <string name="button_clear">Удалить</string>
     <string name="cancel">Отмена</string>
+    <string name="yes">Да</string>
+    <string name="exit">Нажмите еще раз для выхода из приложения</string>
     <string name="permission_explanation">Чтобы сохранить изображение, необходимо разрешение на запись в память или на карту памяти</string>
 </resources>

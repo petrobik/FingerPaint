@@ -26,7 +26,7 @@ public class PatternDialogFragment extends DialogFragment implements View.OnClic
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomDialogTheme);
         View patternDialogView = getActivity().getLayoutInflater().inflate(R.layout.fragment_pattern, null);
         builder.setView(patternDialogView);
-        builder.setTitle(R.string.select_pattern);
+//        builder.setTitle(R.string.select_pattern);
 
         floralButton = (ImageButton) patternDialogView.findViewById(R.id.floralButton);
         flowersButton = (ImageButton) patternDialogView.findViewById(R.id.flowersButton);

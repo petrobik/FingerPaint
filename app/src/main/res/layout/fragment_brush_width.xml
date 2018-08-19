@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_gravity="center"
-    android:padding="8dp">
+    android:padding="16dp">
 
     <ImageButton
         android:layout_width="@dimen/brush_preview_width"
@@ -12,7 +12,7 @@
         android:id="@+id/brushWidthButton"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/transparent_dark"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="16dp" />
 
     <SeekBar
         android:id="@+id/brushWidthSeekBar"

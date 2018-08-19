@@ -1,7 +1,6 @@
 package com.bikshanov.fingerpaint;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
@@ -11,19 +10,14 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.Shader;
-import android.net.Uri;
-import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -99,7 +93,7 @@ public class PaintView extends View {
         eraserWidth = getResources().getDimensionPixelSize((R.dimen.brush_medium));
         pencilWidth = getResources().getDimensionPixelSize(R.dimen.brush_small);
         brushWidth = getResources().getDimensionPixelSize(R.dimen.brush_medium);
-        patternWidth = getResources().getDimensionPixelSize(R.dimen.brush_medium);
+        patternWidth = getResources().getDimensionPixelSize(R.dimen.brush_pattern);
         drawPath = new Path();
         drawPaint = new Paint();
         backgroundPaint = new Paint();
@@ -403,7 +397,6 @@ public class PaintView extends View {
         drawPath = new Path();
         drawPath.reset();
         initPaint();
-
     }
 
     public void clear() {
@@ -418,7 +411,7 @@ public class PaintView extends View {
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
         canvasBitmap.eraseColor(Color.WHITE);
 //        setErase(false);
-        setDrawMode(DrawModes.PENCIL);
+//        setDrawMode(DrawModes.PENCIL);
 //        setEmptyPattern();
         invalidate();
     }
@@ -549,6 +542,8 @@ public class PaintView extends View {
             undonePaths.add(paths.remove(paths.size() - 1));
 //            undonePaints.add(paints.remove(paints.size() - 1));
             invalidate();
+
+
         }
     }
 
@@ -657,5 +652,12 @@ public class PaintView extends View {
 //        catch (Exception e) {
 //            e.printStackTrace();
 //        }
+    }
+
+    public boolean hasUndo() {
+        if (paths.size() > 0)
+            return true;
+        else
+            return false;
     }
 }
