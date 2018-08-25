@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/toolbar_size"
         android:layout_gravity="center"
         android:gravity="center"
         android:background="@drawable/wooden">
@@ -23,16 +23,16 @@
 
             <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="52dp"
+            android:layout_height="@dimen/tool_button_size"
             android:orientation="horizontal"
             android:layout_marginBottom="2dp"
             android:layout_marginTop="2dp">
 
                 <ImageButton
                     android:id="@+id/button_pencil"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:src="@drawable/ic_pencil"
+                    android:layout_width="@dimen/tool_button_size"
+                    android:layout_height="@dimen/tool_button_size"
+                    app:srcCompat="@drawable/ic_pencil"
                     android:background="@drawable/button_selector"
                     android:padding="2dp"
                     android:layout_marginRight="4dp"
@@ -40,9 +40,9 @@
 
                 <ImageButton
                     android:id="@+id/button_brush"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:src="@drawable/ic_paint_brush_2"
+                    android:layout_width="@dimen/tool_button_size"
+                    android:layout_height="@dimen/tool_button_size"
+                    app:srcCompat="@drawable/ic_paint_brush_2"
                     android:background="@drawable/button_selector"
                     android:padding="2dp"
                     android:layout_marginRight="4dp"
@@ -50,45 +50,54 @@
 
                 <ImageButton
                     android:id="@+id/button_eraser"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:src="@drawable/ic_eraser_3"
+                    android:layout_width="@dimen/tool_button_size"
+                    android:layout_height="@dimen/tool_button_size"
+                    app:srcCompat="@drawable/ic_eraser_3"
                     android:background="@drawable/button_selector"
                     android:padding="2dp"
                     android:layout_marginRight="4dp"/>
 
                 <ImageButton
                     android:id="@+id/button_pattern"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:src="@drawable/ic_flower"
+                    android:layout_width="@dimen/tool_button_size"
+                    android:layout_height="@dimen/tool_button_size"
+                    app:srcCompat="@drawable/ic_flower"
                     android:background="@drawable/button_selector"
                     android:padding="2dp"
                     android:layout_marginRight="4dp"/>
 
                 <ImageButton
                     android:id="@+id/button_undo"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:src="@drawable/ic_turn"
+                    android:layout_width="@dimen/tool_button_size"
+                    android:layout_height="@dimen/tool_button_size"
+                    app:srcCompat="@drawable/ic_turn"
                     android:background="@drawable/button_selector"
                     android:padding="2dp"
                     android:layout_marginRight="4dp"/>
 
                 <ImageButton
                     android:id="@+id/button_new"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:src="@drawable/ic_trash"
+                    android:layout_width="@dimen/tool_button_size"
+                    android:layout_height="@dimen/tool_button_size"
+                    app:srcCompat="@drawable/ic_trash"
                     android:background="@drawable/button_selector"
                     android:padding="2dp"
                     android:layout_marginRight="4dp"/>
 
                 <ImageButton
                     android:id="@+id/button_save"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:src="@drawable/ic_image"
+                    android:layout_width="@dimen/tool_button_size"
+                    android:layout_height="@dimen/tool_button_size"
+                    app:srcCompat="@drawable/ic_image"
+                    android:background="@drawable/button_selector"
+                    android:padding="2dp"
+                    android:layout_marginRight="4dp"/>
+
+                <ImageButton
+                    android:id="@+id/button_options"
+                    android:layout_width="@dimen/tool_button_size"
+                    android:layout_height="@dimen/tool_button_size"
+                    app:srcCompat="@drawable/ic_info"
                     android:background="@drawable/button_selector"
                     android:padding="2dp"
                     android:layout_marginRight="4dp"/>

@@ -112,6 +112,13 @@ public class BrushDialogFragment extends DialogFragment implements View.OnClickL
     }
 
     @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        setBrushWidth();
+
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
@@ -140,13 +147,16 @@ public class BrushDialogFragment extends DialogFragment implements View.OnClickL
     @Override
     public void onClick(View view) {
 
+        setBrushWidth();
+        dismiss();
+    }
+
+    public void setBrushWidth() {
+
         int brushSize;
 
         brushSize = brushWidthSeekBar.getProgress() + min;
         getPaintFragment().getPaintView().setLineWidth(brushSize);
-        dismiss();
-//        recycleBitmaps();
-
     }
 
     private void recycleBitmaps() {

@@ -3,6 +3,7 @@ package com.bikshanov.fingerpaint;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -84,66 +85,73 @@ public class PatternDialogFragment extends DialogFragment implements View.OnClic
     @Override
     public void onClick(View view) {
 
-
-
-
         if (view.getId() == R.id.floralButton) {
 
             getPaintFragment().getPaintView().setPattern("floral");
+            getPaintFragment().setPatternMode();
             dismiss();
         }
 
         else if (view.getId() == R.id.flowersButton) {
 
             getPaintFragment().getPaintView().setPattern("flowers");
+            getPaintFragment().setPatternMode();
             dismiss();
         }
 
         else if (view.getId() == R.id.starsButton) {
 
             getPaintFragment().getPaintView().setPattern("stars");
+            getPaintFragment().setPatternMode();
             dismiss();
         }
 
         else if (view.getId() == R.id.grassButton) {
 
             getPaintFragment().getPaintView().setPattern("grass");
+            getPaintFragment().setPatternMode();
             dismiss();
         }
 
         else if (view.getId() == R.id.leavesButton) {
 
             getPaintFragment().getPaintView().setPattern("strawberry");
+            getPaintFragment().setPatternMode();
             dismiss();
         }
 
         else if (view.getId() == R.id.cloudsButton) {
 
             getPaintFragment().getPaintView().setPattern("clouds");
+            getPaintFragment().setPatternMode();
             dismiss();
         }
 
         else if (view.getId() == R.id.brickButton) {
 
             getPaintFragment().getPaintView().setPattern("brick");
+            getPaintFragment().setPatternMode();
             dismiss();
         }
 
         else if (view.getId() == R.id.woodButton) {
 
             getPaintFragment().getPaintView().setPattern("wood");
+            getPaintFragment().setPatternMode();
             dismiss();
         }
 
         else if (view.getId() == R.id.butterflyButton) {
 
             getPaintFragment().getPaintView().setPattern("butterfly");
+            getPaintFragment().setPatternMode();
             dismiss();
         }
 
         else if (view.getId() == R.id.partyButton) {
 
             getPaintFragment().getPaintView().setPattern("party");
+            getPaintFragment().setPatternMode();
             dismiss();
         }
     }

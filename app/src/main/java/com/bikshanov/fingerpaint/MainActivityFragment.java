@@ -37,7 +37,8 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
     private float currentAcceleration;
     private float lastAcceleration;
     private boolean dialogOnScreen = false;
-    ImageButton newButton, pencilButton, brushButton, eraserButton, undoButton, patternButton, saveButton;
+    ImageButton newButton, pencilButton, brushButton, eraserButton, undoButton, patternButton,
+            saveButton, optionsButton;
 //    ImageButton smallestButton, smallButton, smallLargeButton, mediumButton, largeButton;
 
 //    private ViewGroup brushPanel;
@@ -151,6 +152,9 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
         saveButton = (ImageButton) view.findViewById(R.id.button_save);
         saveButton.setOnClickListener(this);
+
+        optionsButton = (ImageButton) view.findViewById(R.id.button_options);
+        optionsButton.setOnClickListener(this);
 
         acceleration = 0.00f;
         currentAcceleration = SensorManager.GRAVITY_EARTH;
@@ -289,13 +293,13 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
 //            paintView.setPatternMode(true);
 
-            paintView.setDrawMode(DrawModes.PATTERN);
-
-            setPatternActive();
-
             PatternDialogFragment patternDialog = new PatternDialogFragment();
 //            patternDialog.setCancelable(false);
             patternDialog.show(getFragmentManager(), "pattern dialog");
+
+//            paintView.setDrawMode(DrawModes.PATTERN);
+//
+//            setPatternActive();
         }
 
         else if (view.getId() == R.id.button_save) {
@@ -318,6 +322,19 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
             saveDialog.show();
 
         }
+
+        else if (view.getId() == R.id.button_options) {
+            AboutDialogFragment aboutDialog = new AboutDialogFragment();
+            aboutDialog.show(getFragmentManager(), "about dialog");
+        }
+    }
+
+    public void setPatternMode() {
+
+        getPaintView().setDrawMode(DrawModes.PATTERN);
+        setPatternActive();
+
+
     }
 
     @TargetApi(23)
@@ -411,15 +428,27 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 getPaintView().clear();
+                setDialogOnScreen(false);
             }
         });
         clearDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
+                setDialogOnScreen(false);
             }
         });
+
+        clearDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                setDialogOnScreen(false);
+            }
+        });
+
         clearDialog.show();
+
+        setDialogOnScreen(true);
 
     }
 

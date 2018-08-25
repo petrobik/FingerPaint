@@ -4,8 +4,9 @@
     <dimen name="brush_small">10dp</dimen>
     <dimen name="brush_pattern">25dp</dimen>
     <dimen name="brush_medium">15dp</dimen>
-    <dimen name="brush_large">20dp</dimen>
     <dimen name="brush_max">30dp</dimen>
-    <dimen name="brush_preview_width">200dp</dimen>
+    <dimen name="brush_preview_width">180dp</dimen>
     <dimen name="brush_preview_height">60dp</dimen>
+    <dimen name="tool_button_size">48dp</dimen>
+    <dimen name="toolbar_size">56dp</dimen>
 </resources>

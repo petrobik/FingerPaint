@@ -24,6 +24,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="scalingPercent" value="1" />
+                                                <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -34,7 +35,8 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="60" />
+                                                <entry key="scalingPercent" value="102" />
+                                                <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -44,13 +46,12 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="backgroundLayerName" value="background" />
-                                      <entry key="foregroundImage" value="D:\android\inkscape\g6323.png" />
-                                      <entry key="foregroundLayerName" value="brushes" />
-                                      <entry key="generateRoundIcon" value="false" />
-                                      <entry key="legacyIconShape" value="NONE" />
+                                      <entry key="backgroundAssetType" value="COLOR" />
+                                      <entry key="backgroundColor" value="ffffff" />
+                                      <entry key="backgroundLayerName" value="back" />
+                                      <entry key="foregroundImage" value="D:\android\inkscape\g8617.png" />
+                                      <entry key="foregroundLayerName" value="icon" />
                                       <entry key="showGrid" value="true" />
-                                      <entry key="webIconShape" value="NONE" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -74,13 +75,29 @@
                   <entry key="vectorAssetStep">
                     <value>
                       <PersistentState>
+                        <option name="children">
+                          <map>
+                            <entry key="clipartAsset">
+                              <value>
+                                <PersistentState>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_info_black_24dp.xml" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
+                            <entry key="color" value="009688" />
                             <entry key="height" value="36" />
-                            <entry key="outputName" value="ic_turn" />
+                            <entry key="outputName" value="ic_info" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="D:\android\icons\turn.svg" />
+                            <entry key="sourceFile" value="D:\android\icons\info.svg" />
                             <entry key="width" value="36" />
                           </map>
                         </option>
