@@ -18,4 +18,6 @@
     <string name="exit">Нажмите еще раз для выхода</string>
     <string name="permission_explanation">Чтобы сохранить изображение, необходимо разрешение на запись в память или на карту памяти</string>
     <string name="icons_link">All icons at toolbar made by <a href="https://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></string>
+    <string name="drawing_saved">Рисунок успешно сохранен</string>
+    <string name="drawing_not_saved">Ошибка сохранения рисунка</string>
 </resources>

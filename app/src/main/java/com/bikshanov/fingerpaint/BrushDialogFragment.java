@@ -67,14 +67,12 @@ public class BrushDialogFragment extends DialogFragment implements View.OnClickL
 
             brushPreviewWidth = displayWidth / 4;
             brushPreviewHeight = displayHeight / 5;
-
         }
 
         else if (screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE) {
 
             brushPreviewWidth = displayWidth / 3;
             brushPreviewHeight = displayHeight / 7;
-
         }
 
         else {
@@ -100,14 +98,6 @@ public class BrushDialogFragment extends DialogFragment implements View.OnClickL
 
         brushWidthSeekBar.setProgress(paintView.getLineWidth() - min);
 
-//        builder.setPositiveButton(R.string.set_brush_width,
-//                new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        paintView.setLineWidth(brushWidthSeekBar.getProgress() + min);
-//                    }
-//                });
-
         return builder.create();
     }
 
@@ -115,7 +105,6 @@ public class BrushDialogFragment extends DialogFragment implements View.OnClickL
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
         setBrushWidth();
-
     }
 
     @Override
@@ -159,18 +148,7 @@ public class BrushDialogFragment extends DialogFragment implements View.OnClickL
         getPaintFragment().getPaintView().setLineWidth(brushSize);
     }
 
-    private void recycleBitmaps() {
-        if (!brushWidthBitmap.isRecycled()) {
-            brushWidthBitmap.recycle();
-        }
-
-        brushPath.reset();
-    }
-
     private final SeekBar.OnSeekBarChangeListener brushWidthChanged = new SeekBar.OnSeekBarChangeListener() {
-
-//        final Bitmap bitmap = Bitmap.createBitmap(brushPreviewWidth, 120, Bitmap.Config.ARGB_8888);
-//        final Canvas canvas = new Canvas(bitmap);
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {

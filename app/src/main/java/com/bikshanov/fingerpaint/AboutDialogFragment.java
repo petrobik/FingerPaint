@@ -18,7 +18,5 @@ public class AboutDialogFragment extends DialogFragment {
         builder.setView(aboutDialogView);
 
         return builder.create();
-
-
     }
 }

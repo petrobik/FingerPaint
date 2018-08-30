@@ -39,9 +39,6 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
     private boolean dialogOnScreen = false;
     ImageButton newButton, pencilButton, brushButton, eraserButton, undoButton, patternButton,
             saveButton, optionsButton;
-//    ImageButton smallestButton, smallButton, smallLargeButton, mediumButton, largeButton;
-
-//    private ViewGroup brushPanel;
 
     private static final int ACCELERATION_THRESHOLD = 100000;
 
@@ -180,13 +177,6 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
             else
                 setBrushActive();
         }
-
-//        paintView.setErase(false);
-//        paintView.setEmptyPattern();
-//        pencilButton.setBackgroundResource(R.drawable.select_button_background);
-//        eraserButton.setBackgroundResource(R.drawable.button_selector);
-//        patternButton.setBackgroundResource(R.drawable.button_selector);
-//        setBrushColor();
     }
 
     public PaintView getPaintView() {
@@ -211,20 +201,9 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
             setPencilActive();
 
-//            if (paintView.isErase()) {
-//                paintView.setErase(false);
-//            }
-//
-//            else if (paintView.isPattern()) {
-//                paintView.setEmptyPattern();
-//            }
-
-//            paintView.setEmptyPattern();
-
             if (paintView.getDrawMode() == DrawModes.PENCIL) {
 
                 BrushDialogFragment brushDialog = new BrushDialogFragment();
-//            brushDialog.setCancelable(false);
                 brushDialog.show(getFragmentManager(), "brush dialog");
             }
 
@@ -241,13 +220,10 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
             if (paintView.getDrawMode() == DrawModes.BRUSH) {
 
                 BrushDialogFragment brushDialog = new BrushDialogFragment();
-//            brushDialog.setCancelable(false);
                 brushDialog.show(getFragmentManager(), "brush dialog");
             }
 
             paintView.setDrawMode(DrawModes.BRUSH);
-//            BrushWidthDialogFragment widthFragment = new BrushWidthDialogFragment();
-//            widthFragment.show(getFragmentManager(), "width dialog");
         }
 
         else if (view.getId() == R.id.button_eraser) {
@@ -259,27 +235,18 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
                 previousMode = currentMode;
             }
 
-//            paintView.setErase(true);
-//            paintView.setEmptyPattern();
-
             setEraserActive();
 
             if (paintView.getDrawMode() == DrawModes.ERASE) {
 
                 BrushDialogFragment brushDialog = new BrushDialogFragment();
-//            brushDialog.setCancelable(false);
                 brushDialog.show(getFragmentManager(), "brush dialog");
             }
 
             paintView.setDrawMode(DrawModes.ERASE);
-//            EraserDialogFragment eraserDialog = new EraserDialogFragment();
-////            eraserDialog.setCancelable(false);
-//            eraserDialog.show(getFragmentManager(), "brush dialog");
-
         }
         else if (view.getId() == R.id.button_undo) {
             paintView.undo();
-
         }
 
         else if (view.getId() == R.id.button_pattern) {
@@ -291,21 +258,13 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
                 previousMode = currentMode;
             }
 
-//            paintView.setPatternMode(true);
-
             PatternDialogFragment patternDialog = new PatternDialogFragment();
-//            patternDialog.setCancelable(false);
             patternDialog.show(getFragmentManager(), "pattern dialog");
-
-//            paintView.setDrawMode(DrawModes.PATTERN);
-//
-//            setPatternActive();
         }
 
         else if (view.getId() == R.id.button_save) {
 
             AlertDialog.Builder saveDialog = new AlertDialog.Builder(getContext());
-//            saveDialog.setTitle(R.string.save_drawing);
             saveDialog.setMessage(R.string.save_drawing_message);
             saveDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
@@ -333,8 +292,6 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
         getPaintView().setDrawMode(DrawModes.PATTERN);
         setPatternActive();
-
-
     }
 
     @TargetApi(23)
@@ -371,58 +328,9 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         }
     }
 
-    private void saveDrawing() {
-
-//        paintView.setDrawingCacheEnabled(true);
-//
-//        String imgSaved = MediaStore.Images.Media.insertImage(this.getContext().getContentResolver(),
-//                paintView.getDrawingCache(), UUID.randomUUID().toString() + ".png", "drawing");
-//
-//        if (imgSaved != null) {
-//            Toast savedToast = Toast.makeText(getContext(), "Drawing saved", Toast.LENGTH_SHORT);
-//            savedToast.show();
-//        }
-//        else {
-//            Toast unsavedToast = Toast.makeText(getContext(), "Drawing not saved", Toast.LENGTH_SHORT);
-//            unsavedToast.show();
-//        }
-//
-//        paintView.destroyDrawingCache();
-
-        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/FingerPaint";
-        File dir = new File(filePath);
-
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        String fileName = UUID.randomUUID().toString().concat(".png");
-        File file = new File(dir, fileName);
-
-        FileOutputStream fout;
-
-        try {
-            fout = new FileOutputStream(file);
-            paintView.getCanvasBitmap().compress(Bitmap.CompressFormat.PNG, 85, fout);
-            fout.flush();
-            fout.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void selectBrush(ImageButton button) {
-        button.setBackgroundResource(R.drawable.brush_button_selected_border);
-    }
-
     private void confirmClear() {
-//        ClearDialogFragment clearDialogFragment = new ClearDialogFragment();
-//        clearDialogFragment.setTargetFragment(MainActivityFragment.this, 300);
-//        clearDialogFragment.show(getFragmentManager(), "clear dialog");
 
         AlertDialog.Builder clearDialog = new AlertDialog.Builder(getContext());
-//            saveDialog.setTitle(R.string.save_drawing);
         clearDialog.setMessage(R.string.clear_drawing_message);
         clearDialog.setPositiveButton(R.string.button_clear, new DialogInterface.OnClickListener() {
             @Override
@@ -449,7 +357,6 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         clearDialog.show();
 
         setDialogOnScreen(true);
-
     }
 
     public void setPencilActive() {
@@ -478,12 +385,5 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         eraserButton.setBackgroundResource(R.drawable.button_selector);
         patternButton.setBackgroundResource(R.drawable.select_button_background);
         brushButton.setBackgroundResource(R.drawable.button_selector);
-    }
-
-    public void setUndo() {
-        if (undoButton.isEnabled()) {
-            undoButton.setEnabled(false);
-        }
-        else undoButton.setEnabled(true);
     }
 }

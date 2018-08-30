@@ -16,6 +16,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,12 +45,7 @@ public class PaintView extends View {
 //    private final Map<Integer, Point> previousPointMap = new HashMap<>();
 
     private ArrayList<Path> paths = new ArrayList<>();
-//    private ArrayList<Paint> paints = new ArrayList<>();
     private ArrayList<Path> undonePaths = new ArrayList<>();
-//    private ArrayList<Paint> undonePaints = new ArrayList<>();
-//    private HashMap<Path, Integer> colorsMap = new HashMap<Path, Integer>();
-//    private HashMap<Path, Integer> widthMap = new HashMap<Path, Integer>();
-//    private HashMap<Path, BitmapShader> patternMap = new HashMap<Path, BitmapShader>();
 
     private Stroke currentStroke = new Stroke();
     private HashMap<Path, Stroke> strokeMap = new HashMap<>();
@@ -72,9 +68,6 @@ public class PaintView extends View {
 
     private int drawMode = DrawModes.PENCIL;
 
-    boolean erase = false;
-    boolean isPattern = false;
-
     float pointX, pointY;
 
     private final int MAX_UNDO = 10;
@@ -84,12 +77,10 @@ public class PaintView extends View {
 
         super(context, attrs);
         init();
-
     }
 
     private void init() {
 
-//        paintScreen = new Paint();
         eraserWidth = getResources().getDimensionPixelSize((R.dimen.brush_medium));
         pencilWidth = getResources().getDimensionPixelSize(R.dimen.brush_small);
         brushWidth = getResources().getDimensionPixelSize(R.dimen.brush_medium);
@@ -101,12 +92,10 @@ public class PaintView extends View {
         patternShader = null;
 
         initPaint();
-
     }
 
     private void initPaint() {
 
-//            drawPaint = new Paint();
             drawPaint.setAntiAlias(true);
 
             switch (drawMode) {
@@ -132,15 +121,6 @@ public class PaintView extends View {
                     break;
             }
 
-//            if (!erase) {
-//                drawPaint.setColor(paintColor);
-//                drawPaint.setStrokeWidth(pencilWidth);
-//            }
-//            else {
-//                drawPaint.setColor(eraseColor);
-//                drawPaint.setStrokeWidth(eraserWidth);
-//            }
-
             drawPaint.setStyle(Paint.Style.STROKE);
             drawPaint.setStrokeJoin(Paint.Join.ROUND);
             drawPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -151,15 +131,12 @@ public class PaintView extends View {
         backgroundPaint.setColor(backgroundColor);
         backgroundPaint.setStyle(Paint.Style.FILL);
         canvas.drawRect(0, 0, this.getWidth(), this.getHeight(), backgroundPaint);
-
-//        canvas.drawBitmap(canvasBitmap, 0, 0, backgroundPaint);
-
     }
 
     private void drawPaths(Canvas canvas) {
 
         for (Path p: paths) {
-//            currentStroke = strokeMap.get(p);
+
             drawPaint.setColor(strokeMap.get(p).getColor());
             drawPaint.setStrokeWidth(strokeMap.get(p).getBrushSize());
             drawPaint.setShader(strokeMap.get(p).getPattern());
@@ -206,15 +183,6 @@ public class PaintView extends View {
                 break;
         }
 
-//        if (!erase) {
-//            drawPaint.setColor(paintColor);
-//            drawPaint.setStrokeWidth(pencilWidth);
-//        }
-//        else {
-//            drawPaint.setColor(eraseColor);
-//            drawPaint.setStrokeWidth(eraserWidth);
-//        }
-//
         drawPaint.setShader(patternShader);
 
         canvas.drawPath(drawPath, drawPaint);
@@ -226,8 +194,7 @@ public class PaintView extends View {
         canvasBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
         drawCanvas = new Canvas(canvasBitmap);
 
-        canvasBitmap.eraseColor(Color.WHITE); //
-
+        canvasBitmap.eraseColor(Color.WHITE);
     }
 
     @Override
@@ -258,7 +225,6 @@ public class PaintView extends View {
 
     private void touchStarted(float x, float y) {
 
-
         currentStroke = new Stroke();
         // move to the coordinates of the touch
         drawPath.reset();
@@ -266,7 +232,6 @@ public class PaintView extends View {
 
         pointX = x;
         pointY = y;
-
     }
 
     // called when the user drags along the screen
@@ -314,9 +279,6 @@ public class PaintView extends View {
         if (paths.size() < MAX_UNDO) {
 
             paths.add(drawPath);
-//            paints.add(drawPaint);
-
-//            drawCanvas.drawBitmap(canvasBitmap, 0, 0, backgroundPaint);
         }
 
         else {
@@ -332,15 +294,7 @@ public class PaintView extends View {
             ArrayList<Path> tmpPaths = new ArrayList<Path>(paths.subList(1, MAX_UNDO));
             paths = tmpPaths;
             paths.add(drawPath);
-//            ArrayList<Paint> tmpPaints = new ArrayList<>(paints.subList(1, MAX_UNDO));
-//            paints = tmpPaints;
-//            paints.add(drawPaint);
-
-//            drawCanvas.drawBitmap(canvasBitmap, 0, 0, backgroundPaint);
         }
-
-//        paths.add(drawPath); //
-
 
         currentStroke.setPattern(patternShader);
 
@@ -376,24 +330,6 @@ public class PaintView extends View {
 
         strokeMap.put(drawPath, currentStroke);
 
-//        if (!erase) {
-//            currentStroke.setColor(paintColor);
-//            currentStroke.setBrushSize(pencilWidth);
-//            strokeMap.put(drawPath, currentStroke);
-////            colorsMap.put(drawPath, paintColor);
-//        }
-//        else {
-//            currentStroke.setColor(eraseColor);
-//            currentStroke.setBrushSize(eraserWidth);
-//            strokeMap.put(drawPath, currentStroke);
-////            colorsMap.put(drawPath, eraseColor);
-//        }
-
-//        widthMap.put(drawPath, pencilWidth);
-//        patternMap.put(drawPath, patternShader);
-
-
-//        drawCanvas.drawPath(drawPath, drawPaint);
         drawPath = new Path();
         drawPath.reset();
         initPaint();
@@ -402,17 +338,11 @@ public class PaintView extends View {
     public void clear() {
 
         paths.clear();
-//        paints.clear();
         undonePaths.clear();
-//        undonePaints.clear();
-//        colorsMap.clear();
-//        widthMap.clear();
         strokeMap.clear();
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
         canvasBitmap.eraseColor(Color.WHITE);
-//        setErase(false);
-//        setDrawMode(DrawModes.PENCIL);
-//        setEmptyPattern();
+
         invalidate();
     }
 
@@ -451,15 +381,6 @@ public class PaintView extends View {
                 drawPaint.setStrokeWidth(eraserWidth);
                 break;
         }
-
-//        if (!erase) {
-//            pencilWidth = width;
-//            drawPaint.setStrokeWidth(pencilWidth);
-//        }
-//        else {
-//            eraserWidth = width;
-//            drawPaint.setStrokeWidth(eraserWidth);
-//        }
     }
 
     public void setBackgroundColor(int color) {
@@ -468,14 +389,6 @@ public class PaintView extends View {
         backgroundPaint.setColor(backgroundColor);
         invalidate();
 
-    }
-
-    public void setBrushSize(float brushSize) {
-
-        float pixelAmount = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, brushSize,
-                getResources().getDisplayMetrics());
-//        drawPaint.setStrokeWidth(pixelAmount);
-        pencilWidth = (int) pixelAmount;
     }
 
     public int getPaintOpacity() {
@@ -505,45 +418,11 @@ public class PaintView extends View {
         return patternWidth;
     }
 
-//    public void setErase(boolean isErase) {
-//
-//        erase = isErase;
-//
-//        if (erase) {
-//            drawPaint.setColor(eraseColor);
-//            drawPaint.setStrokeWidth(eraserWidth);
-//
-//        }
-//        else {
-//            drawPaint.setColor(paintColor);
-//            drawPaint.setStrokeWidth(pencilWidth);
-//        }
-//
-//    }
-
-//    public void setPatternMode(boolean pattern) {
-//
-//        isPattern = pattern;
-//
-//    }
-
-//    public boolean isErase() {
-//        return erase;
-//    }
-//
-//    public boolean isPattern() {
-//
-//        return isPattern;
-//    }
-
     public void undo() {
 
         if (paths.size() > 0) {
             undonePaths.add(paths.remove(paths.size() - 1));
-//            undonePaints.add(paints.remove(paints.size() - 1));
             invalidate();
-
-
         }
     }
 
@@ -551,7 +430,6 @@ public class PaintView extends View {
 
         if (undonePaths.size() > 0) {
             paths.add(undonePaths.remove(undonePaths.size() - 1));
-//            paints.add(undonePaints.remove(undonePaints.size() - 1));
             invalidate();
         }
     }
@@ -566,16 +444,7 @@ public class PaintView extends View {
 
 //        drawPaint.setColor(0xFFFFFFFF);
         drawPaint.setShader(patternShader);
-//
-//        isPattern = true;
     }
-
-//    public void setEmptyPattern() {
-//
-//        patternShader = null;
-//        if (isPattern)
-//            isPattern = false;
-//    }
 
     public void setDrawMode(int drawMode) {
         this.drawMode = drawMode;
@@ -585,79 +454,15 @@ public class PaintView extends View {
         return drawMode;
     }
 
-    public Bitmap getCanvasBitmap() {
-        return canvasBitmap;
-    }
-
-//    private void addToGallery(String path) {
-//        File file = new File(path);
-//        Uri contentUri = Uri.fromFile(file);
-////        Uri contentUri = Uri.parse("file://" + path);
-//        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, contentUri);
-////        mediaScanIntent.setData(contentUri);
-//        getContext().sendBroadcast(mediaScanIntent);
-//    }
-
     public void saveDrawing() {
 
-        Utils.savePicture(this, getContext());
-//        final String fileName = System.currentTimeMillis() + ".png";
-////
-//        setDrawingCacheEnabled(true);
-////        setDrawingCacheQuality(DRAWING_CACHE_QUALITY_HIGH);
-//////
-////        String location = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), getDrawingCache(), fileName,  "Drawing");
-//////
-////        if (location != null) {
-////            addToGallery(location);
-////            Toast message = Toast.makeText(getContext(), "Drawing saved", Toast.LENGTH_SHORT);
-////            message.show();
-////        }
-////        else {
-////            Toast message = Toast.makeText(getContext(), "Drawing not saved", Toast.LENGTH_SHORT);
-////            message.show();
-////        }
-//
-//
-//
-//        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/FingerPaint";
-//        File dir = new File(filePath);
-//
-//        if (!dir.exists()) {
-//            dir.mkdirs();
-//        }
-//
-//        String fileName = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()).concat(".jpg");
-//        File file = new File(dir, fileName);
-//
-//        FileOutputStream fout;
-//
-//        try {
-//            fout = new FileOutputStream(file);
-//            getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 85, fout);
-//            fout.flush();
-//            fout.close();
-//            setDrawingCacheEnabled(false);
-//            addToGallery(file.getAbsolutePath());
-//
-////            MediaScannerConnection.scanFile(getContext(), new String[]{file.toString()}, null,
-////                    new MediaScannerConnection.OnScanCompletedListener() {
-////                        @Override
-////                        public void onScanCompleted(String s, Uri uri) {
-////                            Log.i("SDCard", "Scanned: " + s + ":");
-////                            Log.i("SDCard", "-> uri=" + uri);
-////                        }
-////                    });
-//        }
-//        catch (Exception e) {
-//            e.printStackTrace();
-//        }
-    }
-
-    public boolean hasUndo() {
-        if (paths.size() > 0)
-            return true;
-        else
-            return false;
+        if (Utils.savePicture(this, getContext())) {
+            Toast message = Toast.makeText(getContext(), R.string.drawing_saved, Toast.LENGTH_SHORT);
+            message.show();
+        }
+        else {
+            Toast message = Toast.makeText(getContext(), R.string.drawing_not_saved, Toast.LENGTH_SHORT);
+            message.show();
+        }
     }
 }

@@ -26,7 +26,7 @@ public class Utils {
         return size;
     }
 
-    public static void savePicture(View view, Context context) {
+    public static boolean savePicture(View view, Context context) {
 
         String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/FingerPaint";
         File dir = new File(filePath);
@@ -54,12 +54,14 @@ public class Utils {
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, contentUri);
 
             context.sendBroadcast(mediaScanIntent);
+
+            return true;
         }
 
         catch (Exception e) {
             e.printStackTrace();
+
+            return false;
         }
-
     }
-
 }
