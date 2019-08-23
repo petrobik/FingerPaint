@@ -4,18 +4,14 @@ package com.bikshanov.fingerpaint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
-import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -28,12 +24,7 @@ public class BrushDialogFragment extends DialogFragment implements View.OnClickL
 
     private ImageButton brushWidthButton;
     private Path brushPath;
-    private Paint brushWidthPaint;
-    private Bitmap brushWidthBitmap;
-    private Canvas brushWidthCanvas;
     private SeekBar brushWidthSeekBar;
-    private int progressOffset = 20;
-    private int progressValue;
 
     private int min = 20;
     private int max = 70;
@@ -46,7 +37,6 @@ public class BrushDialogFragment extends DialogFragment implements View.OnClickL
 
     private Bitmap bitmap;
     private Canvas canvas;
-    Point size;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -72,13 +62,13 @@ public class BrushDialogFragment extends DialogFragment implements View.OnClickL
         else if (screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE) {
 
             brushPreviewWidth = displayWidth / 3;
-            brushPreviewHeight = displayHeight / 7;
+            brushPreviewHeight = displayHeight / 8;
         }
 
         else {
 
             brushPreviewWidth = displayWidth / 2;
-            brushPreviewHeight = displayHeight / 10;
+            brushPreviewHeight = displayHeight / 8;
         }
 
         bitmap = Bitmap.createBitmap(brushPreviewWidth, brushPreviewHeight, Bitmap.Config.ARGB_8888);

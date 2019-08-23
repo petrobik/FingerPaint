@@ -31,6 +31,7 @@ public class Utils {
         String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/FingerPaint";
         File dir = new File(filePath);
 
+
         if (!dir.exists()) {
             dir.mkdirs();
         }

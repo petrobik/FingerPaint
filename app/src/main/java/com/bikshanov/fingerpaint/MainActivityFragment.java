@@ -6,25 +6,19 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
-import android.os.Environment;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.thebluealliance.spectrum.SpectrumPalette;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.UUID;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -38,7 +32,7 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
     private float lastAcceleration;
     private boolean dialogOnScreen = false;
     ImageButton newButton, pencilButton, brushButton, eraserButton, undoButton, patternButton,
-            saveButton, optionsButton;
+            saveButton; //optionsButton;
 
     private static final int ACCELERATION_THRESHOLD = 100000;
 
@@ -85,7 +79,6 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
                     confirmClear();
                 }
             }
-
         }
 
         @Override
@@ -150,8 +143,8 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
         saveButton = (ImageButton) view.findViewById(R.id.button_save);
         saveButton.setOnClickListener(this);
 
-        optionsButton = (ImageButton) view.findViewById(R.id.button_options);
-        optionsButton.setOnClickListener(this);
+//        optionsButton = (ImageButton) view.findViewById(R.id.button_options);
+//        optionsButton.setOnClickListener(this);
 
         acceleration = 0.00f;
         currentAcceleration = SensorManager.GRAVITY_EARTH;
@@ -164,6 +157,7 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
     @Override
     public void onColorSelected(int color) {
+
         paintView.setDrawingColor(color);
 
         currentMode = paintView.getDrawMode();
@@ -201,11 +195,14 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
             setPencilActive();
 
-            if (paintView.getDrawMode() == DrawModes.PENCIL) {
+//            if (paintView.getDrawMode() == DrawModes.PENCIL) {
+//
+//                BrushDialogFragment brushDialog = new BrushDialogFragment();
+//                brushDialog.show(getFragmentManager(), "brush dialog");
+//            }
 
-                BrushDialogFragment brushDialog = new BrushDialogFragment();
-                brushDialog.show(getFragmentManager(), "brush dialog");
-            }
+            BrushDialogFragment brushDialog = new BrushDialogFragment();
+            brushDialog.show(getFragmentManager(), "brush dialog");
 
             paintView.setDrawMode(DrawModes.PENCIL);
         }
@@ -217,11 +214,14 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
             setBrushActive();
 
-            if (paintView.getDrawMode() == DrawModes.BRUSH) {
+//            if (paintView.getDrawMode() == DrawModes.BRUSH) {
+//
+//                BrushDialogFragment brushDialog = new BrushDialogFragment();
+//                brushDialog.show(getFragmentManager(), "brush dialog");
+//            }
 
-                BrushDialogFragment brushDialog = new BrushDialogFragment();
-                brushDialog.show(getFragmentManager(), "brush dialog");
-            }
+            BrushDialogFragment brushDialog = new BrushDialogFragment();
+            brushDialog.show(getFragmentManager(), "brush dialog");
 
             paintView.setDrawMode(DrawModes.BRUSH);
         }
@@ -237,11 +237,14 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
             setEraserActive();
 
-            if (paintView.getDrawMode() == DrawModes.ERASE) {
+//            if (paintView.getDrawMode() == DrawModes.ERASE) {
+//
+//                BrushDialogFragment brushDialog = new BrushDialogFragment();
+//                brushDialog.show(getFragmentManager(), "brush dialog");
+//            }
 
-                BrushDialogFragment brushDialog = new BrushDialogFragment();
-                brushDialog.show(getFragmentManager(), "brush dialog");
-            }
+            BrushDialogFragment brushDialog = new BrushDialogFragment();
+            brushDialog.show(getFragmentManager(), "brush dialog");
 
             paintView.setDrawMode(DrawModes.ERASE);
         }
@@ -264,7 +267,7 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
         else if (view.getId() == R.id.button_save) {
 
-            AlertDialog.Builder saveDialog = new AlertDialog.Builder(getContext());
+            AlertDialog.Builder saveDialog = new AlertDialog.Builder(getContext(), R.style.CustomDialogTheme);
             saveDialog.setMessage(R.string.save_drawing_message);
             saveDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
@@ -282,10 +285,10 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
         }
 
-        else if (view.getId() == R.id.button_options) {
-            AboutDialogFragment aboutDialog = new AboutDialogFragment();
-            aboutDialog.show(getFragmentManager(), "about dialog");
-        }
+//        else if (view.getId() == R.id.button_options) {
+//            AboutDialogFragment aboutDialog = new AboutDialogFragment();
+//            aboutDialog.show(getFragmentManager(), "about dialog");
+//        }
     }
 
     public void setPatternMode() {
@@ -330,7 +333,7 @@ public class MainActivityFragment extends Fragment implements SpectrumPalette.On
 
     private void confirmClear() {
 
-        AlertDialog.Builder clearDialog = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder clearDialog = new AlertDialog.Builder(getContext(), R.style.CustomDialogTheme);
         clearDialog.setMessage(R.string.clear_drawing_message);
         clearDialog.setPositiveButton(R.string.button_clear, new DialogInterface.OnClickListener() {
             @Override

@@ -17,8 +17,8 @@
 
             <ImageButton
                 android:id="@+id/floralButton"
-                android:layout_height="60dp"
-                android:layout_width="60dp"
+                android:layout_height="@dimen/pattern_preview_width"
+                android:layout_width="@dimen/pattern_preview_height"
                 android:src="@drawable/floral"
                 android:background="@color/md_white"
                 android:layout_marginBottom="8dp"
@@ -28,8 +28,8 @@
 
             <ImageButton
                 android:id="@+id/flowersButton"
-                android:layout_height="60dp"
-                android:layout_width="60dp"
+                android:layout_height="@dimen/pattern_preview_width"
+                android:layout_width="@dimen/pattern_preview_height"
                 android:src="@drawable/flowers"
                 android:background="@color/md_white"
                 android:layout_marginBottom="8dp"
@@ -38,8 +38,8 @@
 
             <ImageButton
                 android:id="@+id/starsButton"
-                android:layout_height="60dp"
-                android:layout_width="60dp"
+                android:layout_height="@dimen/pattern_preview_width"
+                android:layout_width="@dimen/pattern_preview_height"
                 android:src="@drawable/stars"
                 android:background="@color/md_white"
                 android:layout_marginBottom="8dp"
@@ -48,8 +48,8 @@
 
             <ImageButton
                 android:id="@+id/cloudsButton"
-                android:layout_height="60dp"
-                android:layout_width="60dp"
+                android:layout_height="@dimen/pattern_preview_width"
+                android:layout_width="@dimen/pattern_preview_height"
                 android:src="@drawable/clouds_200"
                 android:background="@color/md_white"
                 android:layout_marginBottom="8dp"
@@ -58,8 +58,8 @@
 
             <ImageButton
                 android:id="@+id/grassButton"
-                android:layout_height="60dp"
-                android:layout_width="60dp"
+                android:layout_height="@dimen/pattern_preview_width"
+                android:layout_width="@dimen/pattern_preview_height"
                 android:src="@drawable/grass"
                 android:background="@color/md_white"
                 android:layout_marginBottom="8dp"
@@ -68,8 +68,8 @@
 
             <ImageButton
                 android:id="@+id/leavesButton"
-                android:layout_height="60dp"
-                android:layout_width="60dp"
+                android:layout_height="@dimen/pattern_preview_width"
+                android:layout_width="@dimen/pattern_preview_height"
                 android:src="@drawable/strawberry"
                 android:background="@color/md_white"
                 android:layout_marginBottom="8dp"
@@ -78,8 +78,8 @@
 
             <ImageButton
                 android:id="@+id/brickButton"
-                android:layout_height="60dp"
-                android:layout_width="60dp"
+                android:layout_height="@dimen/pattern_preview_width"
+                android:layout_width="@dimen/pattern_preview_height"
                 android:src="@drawable/brick"
                 android:background="@color/md_white"
                 android:layout_marginBottom="8dp"
@@ -88,8 +88,8 @@
 
             <ImageButton
                 android:id="@+id/woodButton"
-                android:layout_height="60dp"
-                android:layout_width="60dp"
+                android:layout_height="@dimen/pattern_preview_width"
+                android:layout_width="@dimen/pattern_preview_height"
                 android:src="@drawable/wood"
                 android:background="@color/md_white"
                 android:layout_marginBottom="8dp"
@@ -98,8 +98,8 @@
 
             <ImageButton
                 android:id="@+id/partyButton"
-                android:layout_height="60dp"
-                android:layout_width="60dp"
+                android:layout_height="@dimen/pattern_preview_width"
+                android:layout_width="@dimen/pattern_preview_height"
                 android:src="@drawable/party"
                 android:background="@color/md_white"
                 android:layout_marginBottom="8dp"
@@ -108,8 +108,8 @@
 
             <ImageButton
                 android:id="@+id/butterflyButton"
-                android:layout_height="60dp"
-                android:layout_width="60dp"
+                android:layout_height="@dimen/pattern_preview_width"
+                android:layout_width="@dimen/pattern_preview_height"
                 android:src="@drawable/butterfly"
                 android:background="@color/md_white"
                 android:layout_marginBottom="8dp"

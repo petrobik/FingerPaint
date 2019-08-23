@@ -11,9 +11,7 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.Shader;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -33,10 +31,7 @@ public class PaintView extends View {
     private static final int PENCIL_OPACITY = 255;
     private static final int ERASER_OPACITY = 255;
 
-    private Bitmap bitmap;
     private Bitmap canvasBitmap;
-    private Canvas bitmapCanvas;
-//    private final Paint paintScreen;
     private Paint drawPaint;
     private Paint backgroundPaint;
     private Canvas drawCanvas;

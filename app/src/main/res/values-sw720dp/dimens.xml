@@ -1,11 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="brush_min">5dp</dimen>
     <dimen name="brush_small">10dp</dimen>
-    <dimen name="brush_pattern">15dp</dimen>
-    <dimen name="brush_large">20dp</dimen>
+    <dimen name="brush_pattern">30dp</dimen>
+    <dimen name="brush_medium">20dp</dimen>
     <dimen name="brush_max">35dp</dimen>
     <dimen name="brush_preview_width">200dp</dimen>
-    <dimen name="brush_preview_height">60dp</dimen>
+    <dimen name="brush_preview_height">80dp</dimen>
+    <dimen name="tool_button_size">52dp</dimen>
+    <dimen name="toolbar_size">60dp</dimen>
     <dimen name="pattern_preview_width">60dp</dimen>
     <dimen name="pattern_preview_height">60dp</dimen>
 </resources>

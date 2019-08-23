@@ -12,6 +12,7 @@ public class DrawModes {
     public static final int PATTERN = 2;
     public static final int BRUSH = 3;
 
+
     public DrawModes(@DrawMode int mode) {
     }
 
@@ -20,5 +21,4 @@ public class DrawModes {
     public @interface DrawMode {
 
     }
-
 }
